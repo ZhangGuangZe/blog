@@ -56,3 +56,51 @@
 
 ## 第二周
 
+### 收获
+- 了解了如何使用BNF规范去设计一门编程语言；并且可以通过图灵完备性去判断是否为编程语言；
+- 从小到大理解了一门编程语言的结构；
+
+### 不足
+- 观看视频学习效率不高；
+- 作业拖延严重；
+
+### 解决方案
+- 打开xmind记录学习中遇到的问题；
+- 周四的作业在周五做完，周六的作业在周天做完，并在周天提交总结和作业；
+
+### 随堂练习
+1. 编写十进制产生式
+```
+<Number> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" //1-9的整数
+<Decimal> ::= "0" | (("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") <Number>*) //所有十进制数
+```
+
+2. 编写加法产生式
+```
+<Number> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" //1-9的整数
+<Decimal> ::= "0" | (("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") <Number>*) //所有十进制数
+<AdditionExpression> ::= <Decimal> | <AdditionExpression> "+" <Decimal> //加法运算
+```
+
+3. 编写带括号的四则运算产生式
+```
+<Number> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" //1-9的整数
+<Decimal> ::= "0" | (("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") <Number>*) //所有十进制数
+//优先级
+<PriorityExpression> ::= <Decimal> | "(" <logicalExpression> ")"
+//乘除运算
+<MultiplicationExpression> ::= <PriorityExpression> | <MultiplicationExpression> "*" <PriorityExpression> | <MultiplicationExpression> "/" <PriorityExpression> 
+//加减运算
+<AdditionExpression> ::= <AdditionExpression> | <AdditionExpression> "+" <MultiplicationExpression> | <AdditionExpression> "-" <MultiplicationExpression>
+//逻辑运算
+<logicalExpression> ::= <logicalExpression> | <logicalExpression> "||" <AdditionExpression> | <logicalExpression> "&&" <AdditionExpression>
+```
+
+### 课后作业
+1. 写一个正则表达式 匹配所有 Number 直接量
+```
+[1-9]\d*\.?\d*)|(0\.\d*[1-9]\b0[xX][0-9a-fA-F]+\b/^[+-]?[\d]+([\.][\d]+)?([Ee][+-]?[\d]+)?$/
+```
+2. 写一个 UTF-8 Encoding 的函数
+
+3. 写一个正则表达式，匹配所有的字符串直接量，单引号和双引号
