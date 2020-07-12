@@ -1,7 +1,8 @@
 {
   "devDependencies": {
     "@vuepress/theme-blog": "^2.0.3",
-    "vuepress": "^1.3.0"
+    "vuepress": "^1.3.0",
+    "license": "MIT"
   },
   "scripts": {
     "docs:dev": "vuepress dev docs",
