@@ -23,12 +23,16 @@ module.exports = {
                 link: '/computer/'
             },
             {
-                text: '前端体系',
+                text: '知识体系',
                 link: '/front/'
             },
             {
-                text: '编程练习',
+                text: '编程能力',
                 link: '/exercise/'
+            },
+            {
+                text: '架构能力',
+                link: '/architecture/'
             },
             {
                 text: '工程体系',
