@@ -19,24 +19,24 @@ module.exports = {
                 link: '/'
             },
             {
+                text: '指南',
+                link: '/guide/'
+            },
+            {
                 text: '计算机基础',
                 link: '/computer/'
             },
             {
-                text: '知识体系',
+                text: '前端知识体系',
                 link: '/front/'
             },
             {
-                text: '编程能力',
-                link: '/exercise/'
-            },
-            {
-                text: '架构能力',
-                link: '/architecture/'
-            },
-            {
-                text: '工程体系',
+                text: '前端工程化',
                 link: '/engineering/'
+            },
+            {
+                text: '实战项目',
+                link: '/exercise/'
             },
             {
                 text: '学习总结',
@@ -50,16 +50,44 @@ module.exports = {
 
         // 配置侧边栏
         sidebar: {
-            '/front/': [{
-                title: '前端体系',
-                collapsable: false,
-                children: [
-                    ['/front/', '简介'],
-                    ['/front/html', 'HTML'],
-                    ['/front/css', 'CSS'],
-                    ['/front/javascript', 'JavaScript']
-                ]
-            }],
+            '/front/': [
+                {
+                    title: '前端知识体系',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ['/front/', '简介']
+                    ]
+                },
+                {
+                    title: 'HTML',
+                    collapsable: false,
+                    sidebarDepth: 2
+                },
+                {
+                    title: 'CSS',
+                    collapsable: false,
+                    sidebarDepth: 2
+                },
+                {
+                    title: 'JavaScript',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ['/front/javascript/history', '发展史'],
+                    ]
+                },
+                {
+                    title: 'WebAPIs',
+                    collapsable: false,
+                    sidebarDepth: 2
+                },
+                {
+                    title: '浏览器工作原理',
+                    collapsable: false,
+                    sidebarDepth: 2
+                }
+            ],
             '/computer/': [{
                 title: '计算机基础',
                 collapsable: false,
@@ -67,7 +95,12 @@ module.exports = {
                 children: [
                     ['/computer/', '简介'],
                     ['/computer/algorithm', '数据结构与算法'],
-                    ['/computer/network', '计算机网络']
+                    ['/computer/protocol', '网络协议'],
+                    ['/computer/patterns', '设计模式'],
+                    ['/computer/network', '计算机网络'],
+                    ['/computer/compile', '编译原理'],
+                    ['/computer/composition', '计算机组成原理'],
+                    ['/computer/os', '操作系统']
                 ]
             }],
             '/summarize/': [{
