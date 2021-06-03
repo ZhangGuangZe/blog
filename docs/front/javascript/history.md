@@ -37,9 +37,40 @@
 
 1995 年 12 月 4 日，网景和 Sun 公司在联合新闻稿中发布 JavaScript，将其称之为一种用于企业网络、互联网的开放式跨平台对象脚本语言。
 
-### 初始版本及特性
+### 早期版本及特性
 
-1996 年 3 月，在 Navigator 2 正式版中支持 JavaScript 1.0，并在 Netscape Enterprise Serve 2.0 中将 JavaScript 1.0 集成到 LiveWire 服务器端脚本组件中。
+1996 年 3 月，在 Navigator 2.0 正式版中支持 JavaScript 1.0，并在 Netscape Enterprise Serve 2.0 中将 JavaScript 1.0 集成到 LiveWire 服务器端脚本组件中。
+
+JavaScript 1.0 主要包括语法、数据类型和内置库三个部分。
+
+借鉴于 C 语言的语法包括 `if` 条件语句；`for`、`while` 循环语句；`break`、`continue`、`return` 流程控制语句；大部分表达式语句和语句块（`{}`）。
+
+受到 AWK 语言启发的语法包括 `for-in` 语句和 `function` 声明。还有借鉴于 Java 语言的无符号右移运算符（`>>>`）。
+
+而 JavaScript 独特的语法包括重载的二元加（可支持数字相加和字符串拼接）运算符、`with` 语句、使用关键字 `var` 作为前缀的变量声明、没有块级作用域和自动分号插入规则（ASI）等；
+
+数据类型包括 `Boolean`、`String`、`Number`、`Object`、`Function` 五种基本类型和 `undefined`、`null` 两个特殊值；
+
+内置库包括内置方法、对象和构造函数。其中对象包括通用和宿主特定对象两类。通用对象有 `String`、`Date`、`Object` 和 `Math`，当然还有一些缺乏实用性或存在 bug 的通用对象，比如 `Array` 对象；宿主特定对象包括浏览器端的 DOM 以及服务器端的一些对象。内置方法包括 `evel`，还有与 Unix 平台相关的 `isNaN` 以及在不同操作系统有不同行为的 `parseFloat`、`parseInt` 等。
+
+1996 年 8 月，JavaScript 1.1 发布于 Navigator 3.0 中。
+
+JavaScript 1.1 新增 `delete`、`typeof` 和 `void` 运算符；加入隐式类型转换规则；在对象模型中引入原型对象；提供可用的 `Array` 等内置对象及其相关属性。
+
+JavaScript 早期版本由于时间限制和当时需要等原因，出现了一些奇奇怪怪的未完成与完成的特性以及来不及修改的 bug，为后续版本带来挑战以及让开发者产生疑惑。
+
+这些疑惑或 bug 包括：
+
+- 支持多个相同 `var` 和 `function` 声明；
+- 隐式类型转换存在问题的 `==` 运算符；
+- 将整数截断取模转换的位运算；
+- 不同场景调用有不同含义的 `this` 关键字；
+- 影响函数及其函数调用栈形参的 `arguments` 对象及其 `caller` 属性；
+- 对象的属性可以像数组一样通过方括号索引访问；
+- 可以添加和访问属性的字符串值；
+- 类似 HTML 的注释等。
+
+虽然绝大多数的疑惑和 bug 得以修正和解决，但有些特性疑惑行为不仅没有减少，甚至还增加了更多的疑惑。
 
 ## 初步发展
 
