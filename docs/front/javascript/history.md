@@ -39,6 +39,8 @@
 
 ### 早期版本及特性
 
+#### JavaScript 1.0
+
 1996 年 3 月，在 Navigator 2.0 正式版中支持 JavaScript 1.0，并在 Netscape Enterprise Serve 2.0 中将 JavaScript 1.0 集成到 LiveWire 服务器端脚本组件中。
 
 JavaScript 1.0 主要包括语法、数据类型和内置库三个部分。
@@ -52,6 +54,8 @@ JavaScript 1.0 主要包括语法、数据类型和内置库三个部分。
 数据类型包括 `Boolean`、`String`、`Number`、`Object`、`Function` 五种基本类型和 `undefined`、`null` 两个特殊值；
 
 内置库包括内置方法、对象和构造函数。其中对象包括通用和宿主特定对象两类。通用对象有 `String`、`Date`、`Object` 和 `Math`，当然还有一些缺乏实用性或存在 bug 的通用对象，比如 `Array` 对象；宿主特定对象包括浏览器端的 DOM 以及服务器端的一些对象。内置方法包括 `evel`，还有与 Unix 平台相关的 `isNaN` 以及在不同操作系统有不同行为的 `parseFloat`、`parseInt` 等。
+
+#### JavaScript 1.1
 
 1996 年 8 月，JavaScript 1.1 发布于 Navigator 3.0 中。
 
@@ -72,17 +76,20 @@ JavaScript 早期版本由于时间限制和当时需要等原因，出现了一
 
 虽然绝大多数的疑惑和 bug 得以修正和解决，但有些特性疑惑行为不仅没有减少，甚至还增加了更多的疑惑。
 
+#### JavaScript 1.2
+
+
 ### 微软介入
 
 随着网景凭借其浏览器在 Web 领域取得巨大市场份额，微软也开始加大对 IE 浏览器的投入，并通过“拥抱、扩展、灭绝”的战略来吞噬 Web 市场。
 
-微软最初决定在 IE 上嵌入用于脚本的 Visual Basic（VB）和用于应用程序的 Java。由于嵌入 VB 需要花费大量时间，尝试 Visual Basic for Application（VBA）又过于复杂，最终微软通过脚本化 VB 开发出易于 Web 开发人员使用的 VBScript。
+微软最初决定在 IE 上嵌入用于脚本的 Visual Basic（VB）和用于应用程序的 Java。由于嵌入 VB 需要花费大量时间，尝试 Visual Basic for Application（VBA）又过于复杂，微软最终通过脚本化 VB 开发出易于 Web 开发人员使用的 VBScript。
 
 为了能让 IE 3 与 Navigator 3 兼容，微软不得不支持 JavaScript，微软通过研究和逆向工程 JavaScript，编写相关的解释器、解析器和垃圾回收器来提供对 JavaScript 的支持，为避免商标引起的纠纷，将其改名为 JScript。
 
-微软在 Windows 中实现基于组件的脚本技术 Active Script 来统一支持 VBScript 和 JScript 等脚本，并将这些脚本应用于 IE、Active Server Page（ASP）和 Windows Script Host（WSH）宿主环境中。
+微软在 Windows 中实现基于组件的脚本技术 Active Script 来统一支持 VBScript 和 JScript 等脚本，并将这些脚本应用于 IE、Active Server Page（ASP）和 Windows Script Host（WSH）等其他宿主环境中。
 
-1996 年 8 月，微软正式发布 IE 3 正式发布，浏览器的市场开启了激烈的竞争。
+1996 年 8 月，微软正式发布 IE 3 正式发布，Web 市场开启了激烈的竞争。
 
 ## 初步发展
 
