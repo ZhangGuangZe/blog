@@ -23,7 +23,7 @@
 
 因为当时的 Java 比较复杂，并不适合初学者；而且微软针对不同的开发者提供不同的产品。所以，针对专业程序员，提供 Java 来完成主要的交互，并为其他用户群体提供 Java applet 之类的组件；针对其他用户群体，提供一种“胶水语言”把 Java applet 等其他组件粘合在一起，并且可以操作 HTML 元素，使其更具交互性。
 
-化解争论后，Marc Andreessen 提出开发代号为 Mocha 的浏览器脚本语言，用于将它集成到未来的 Navigator 2 中，计划在客户端和服务器端都使用它，强调它用于辅助 Java，所以必须看起来像 Java。
+化解争论后，Marc Andreessen 提出开发代号为 Mocha 的浏览器脚本语言，用于将它集成到未来的 Navigator 2 中，计划在客户端和服务器端都使用它，强调它用于辅助 Java，所以必须看起来像 Java，而且应该简单易用。
 
 为了评估 Mocha 能否成功集成到 Netscape Navigator 2 中，网景管理层需要一个语言的原型。1995 年 5 月，Brendan Eich 花了十天的时间实现语言的原型。
 
@@ -71,6 +71,18 @@ JavaScript 早期版本由于时间限制和当时需要等原因，出现了一
 - 类似 HTML 的注释等。
 
 虽然绝大多数的疑惑和 bug 得以修正和解决，但有些特性疑惑行为不仅没有减少，甚至还增加了更多的疑惑。
+
+### 微软介入
+
+随着网景凭借其浏览器在 Web 领域取得巨大市场份额，微软也开始加大对 IE 浏览器的投入，并通过“拥抱、扩展、灭绝”的战略来吞噬 Web 市场。
+
+微软最初决定在 IE 上嵌入用于脚本的 Visual Basic（VB）和用于应用程序的 Java。由于嵌入 VB 需要花费大量时间，尝试 Visual Basic for Application（VBA）又过于复杂，最终微软通过脚本化 VB 开发出易于 Web 开发人员使用的 VBScript。
+
+为了能让 IE 3 与 Navigator 3 兼容，微软不得不支持 JavaScript，微软通过研究和逆向工程 JavaScript，编写相关的解释器、解析器和垃圾回收器来提供对 JavaScript 的支持，为避免商标引起的纠纷，将其改名为 JScript。
+
+微软在 Windows 中实现基于组件的脚本技术 Active Script 来统一支持 VBScript 和 JScript 等脚本，并将这些脚本应用于 IE、Active Server Page（ASP）和 Windows Script Host（WSH）宿主环境中。
+
+1996 年 8 月，微软正式发布 IE 3 正式发布，浏览器的市场开启了激烈的竞争。
 
 ## 初步发展
 
