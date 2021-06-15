@@ -49,17 +49,17 @@ JavaScript 1.0 主要包括语法、数据类型和内置库三个部分。
 
 受到 AWK 语言启发的语法包括 `for-in` 语句和 `function` 声明。还有借鉴于 Java 语言的无符号右移运算符（`>>>`）。
 
-而 JavaScript 独特的语法包括重载的二元加（可支持数字相加和字符串拼接）运算符、`with` 语句、使用关键字 `var` 作为前缀的变量声明、没有块级作用域和自动分号插入规则（ASI）等；
+而 JavaScript 独特的语法包括重载的二元加（可支持数字相加和字符串拼接）运算符、`with` 语句、使用关键字 `var` 作为前缀的变量声明、没有块级作用域、函数声明不支持嵌套和自动分号插入规则（ASI）等；
 
 数据类型包括 `Boolean`、`String`、`Number`、`Object`、`Function` 五种基本类型和 `undefined`、`null` 两个特殊值；
 
-内置库包括内置方法、对象和构造函数。其中对象包括通用和宿主特定对象两类。通用对象有 `String`、`Date`、`Object` 和 `Math`，当然还有一些缺乏实用性或存在 bug 的通用对象，比如 `Array` 对象；宿主特定对象包括浏览器端的 DOM 以及服务器端的一些对象。内置方法包括 `evel`，还有与 Unix 平台相关的 `isNaN` 以及在不同操作系统有不同行为的 `parseFloat`、`parseInt` 等。
+内置库包括内置函数、对象和构造函数。其中对象包括通用和宿主特定对象两类。通用对象有 `String`、`Date`、`Object` 和 `Math`，当然还有一些缺乏实用性或存在 bug 的通用对象，比如 `Array` 对象；宿主特定对象包括浏览器端的 DOM 以及服务器端相关的对象。内置方法包括 `evel`，还有与 Unix 平台相关的 `isNaN` 以及在不同操作系统有不同行为的 `parseFloat`、`parseInt` 等。
 
 #### JavaScript 1.1
 
 1996 年 8 月，JavaScript 1.1 发布于 Navigator 3.0 中。
 
-JavaScript 1.1 新增 `delete`、`typeof` 和 `void` 运算符；加入隐式类型转换规则；在对象模型中引入原型对象；提供可用的 `Array` 等内置对象及其相关属性。
+JavaScript 1.1 新增 `delete`、`typeof` 和 `void` 运算符；加入隐式类型转换规则；在对象模型中引入原型对象；提供可用的 `Array`、`Boolean`、`Function` 和 `Number` 内置对象及其相关属性。
 
 JavaScript 早期版本由于时间限制和当时需要等原因，出现了一些奇奇怪怪的未完成与完成的特性以及来不及修改的 bug，为后续版本带来挑战以及让开发者产生疑惑。
 
@@ -74,10 +74,15 @@ JavaScript 早期版本由于时间限制和当时需要等原因，出现了一
 - 可以添加和访问属性的字符串值；
 - 类似 HTML 的注释等。
 
-虽然绝大多数的疑惑和 bug 得以修正和解决，但有些特性疑惑行为不仅没有减少，甚至还增加了更多的疑惑。
-
 #### JavaScript 1.2
 
+1997 年 6 月，网景的 Navigator 4.0 发布，其中包含 JavaScript 1.2。该版本主要包括对 JavaScript 1.0/1.1 引擎、语法、内置库的新增、增强及修复。
+
+在引擎方面，使用基于标记/清除算法的垃圾收集器取代了基于引用计数的内存管理机制。
+
+在语法方面，新增了 `do...while`（C）、`labeled`（Java）、`switch`（C 和 Java）、`import` 和 `export`（Java）语句，并增加了 `break` 和 `continue` 语句的语义。新增对象和数组字面量（Python），为 arguments 对象增加 `callee` 属性。使用词法作用域让函数可以嵌套，新增函数表达式。消除 `==` 运算符中存在隐式转换的问题，让 `delete` 操作符可删除对象属性。
+
+在内置库方面，新增借鉴于 Perl 的 RegExp 内置对象及其语法和语义。为 Array 和 String 对象加入受其他语言影响的特性。为所有内置对象新增定义原型对象的 `__proto__` 属性。
 
 ### 微软介入
 
