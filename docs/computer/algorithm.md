@@ -178,7 +178,13 @@ merge(arr1, arr2); // => [0,1,2,3,4,5,6]
 
 ### LeetCode 题解
 
-- [15.三数之和](https://leetcode-cn.com/problems/3sum/)
+- 数组元素之和
+
+    - [1 两数之和](https://leetcode-cn.com/problems/two-sum/solution/shu-zi-zhi-he-liang-shu-zhi-he-by-qian-d-zj9h/)
+    - [167 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/solution/shu-zi-zhi-he-liang-shu-zhi-he-ii-shu-ru-zcv8/)
+    - [15 三数之和](https://leetcode-cn.com/problems/3sum/solution/shu-zi-zhi-he-san-shu-zhi-he-by-qian-dua-g7yp/)
+    - [16 最接近的三数之和](https://leetcode-cn.com/problems/3sum-closest/solution/shu-zu-yuan-su-zhi-he-zui-jie-jin-de-san-c0st/)
+    - [18 四数之和](https://leetcode-cn.com/problems/4sum/solution/shu-zu-yuan-su-zhi-he-si-shu-zhi-he-by-q-4whu/)
 
 - [169.多数元素](https://leetcode-cn.com/problems/majority-element/)
 
