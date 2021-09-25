@@ -1,5 +1,9 @@
 # JavaScript 发展史
 
+::: tip
+文中提到的 JavaScript 在狭义上讲是一种方言，比如网景创造的 JavaScript 或者其他实现，在广义上讲则是官方规范。
+:::
+
 1989-1990 年，为了能够满足学术界信息共享的需求，CERN 的 Tim Berners-Lee 在互联网的基础上，将已有的超文本系统、传输控制协议和域名系统等技术结合起来创造并实现了**万维网**（World Wide Web，也称 Web）。其中包括世界上第一个网页浏览器——WorldWideWeb（Nexus）。
 
 1992-1993 年，美国伊利诺伊大学厄巴纳香槟分校的本科生 Marc Andreessen 和 NCSA 的 Eric Bina 开发并发布 Mosaic 浏览器，这是第一款将图形与网页文本结合的图形化 Web 浏览器，这把 Web 推到互联网的风口上，拉开各大公司抢占万维网市场的序幕。
@@ -314,7 +318,7 @@ ECMA-262 第 6 版 ECMAScript 2015 规范简称 ES6 或者 ES2015，在 2015 年
 - stage 3 候选提案阶段。实现支持，获取用户反馈。
 - stage 4 完成提案阶段。验收测试，将添加到下一版本中。
 
-具体提案流程请看[这里](https://tc39.es/process-document/)。
+具体提案流程在[这里](https://tc39.es/process-document/)。
 
 从 ES6 开始，规范的版本将与出版年份关联，所以 ES6 也称 ES2015，以后的版本都以年份命名，比如 2016 年发布的称为 ES2016，2017 年发布的称为 ES2017，以此类推。
 
@@ -377,6 +381,20 @@ ECMA-262 第 6 版 ECMAScript 2015 规范简称 ES6 或者 ES2015，在 2015 年
 - `Promise` 添加 `any` 方法；
 - `WeakRefs`。
 
+关于 ES6 以后的所有提案都在[这里](https://github.com/tc39/proposals)。
+
 ## 展望未来
 
-ECMAScript 2022 中的 Class Fields 会再次将 JavaScript 拖入泥潭吗？TypeScript 和 Deno 会是 JavaScript 的吗？
+ECMAScript 2022 中的 Class Fields 会再次将 JavaScript 拖入泥潭吗？TypeScript 和 Deno 会是 JavaScript 的未来吗？
+
+## 参考资料
+
+- [《JavaScript 二十年》](https://github.com/doodlewind/jshistory-cn)
+- 《JavaScript 高级程序设计》（第四版）
+- 《深入理解 JavaScript 特性》
+- 《JavaScript 语言精髓与编程实践》（第 3 版）
+- [《Speaking JavaScript》](http://speakingjs.com/)
+- [《You Don't Know JS Yet》（第二版）](https://github.com/getify/You-Dont-Know-JS)
+- [《Exploring JS》](https://exploringjs.com/)
+- MDN
+- 维基百科
