@@ -1,8 +1,16 @@
 # JavaScript 发展史
 
-::: tip
-文中提到的 JavaScript 在狭义上讲是一种方言，比如网景创造的 JavaScript 或者其他实现，在广义上讲则是官方规范。
-:::
+## 前言
+
+JavaScript 简单易学但又很难真正掌握，想要深入理解 JavaScript，首先需要了解 JavaScript 的发展脉络。通过学习 JavaScript 发展史，我们可以：
+
+- 了解 JavaScript 的诞生背景，命名的由来。
+- 了解 JavaScript 一些早期设计失误或者令人迷惑的特性是如何产生的，后期又将如何弥补。
+- 了解 JavaScript 标准化之路遇到的坎坷与成功。
+- 了解 JavaScript 特性的进化。
+- 了解 JavaScript 未来如何发展。
+
+## 史前时代
 
 1989-1990 年，为了能够满足学术界信息共享的需求，CERN 的 Tim Berners-Lee 在互联网的基础上，将已有的超文本系统、传输控制协议和域名系统等技术结合起来创造并实现了**万维网**（World Wide Web，也称 Web）。其中包括世界上第一个网页浏览器——WorldWideWeb（Nexus）。
 
