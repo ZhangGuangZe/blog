@@ -30,15 +30,13 @@
 
 通过大 O 表示法可以将算法的增长数量级表示为：常数阶 O(1)、对数阶 O(logn)、线性阶 O(n)、线性对数阶 O(nlogn)、平方阶 O(n<sup>2</sup>)、指数阶 O(2<sup>n</sup>) 等。
 
-<img :src="$withBase('/algorithm/computational_complexity.png')" alt="计算复杂度" style="display: block; margin: 0 auto;">
-
-图来源于维基百科。
+![Linked List](https://upload.wikimedia.org/wikipedia/commons/7/7e/Comparison_computational_complexity.svg)
 
 注：具体的算法分析过程将会在各算法中详细说明。
 
 ## 数组
 
-**数组**数据结构（array data structure）是一种分配一块**连续**内存空间存储**相同类型**元素的线性表数据结构。
+**数组**（Array）是一种分配一块**连续**内存空间存储**相同类型**元素的线性表数据结构。
 
 优点是允许通过索引（下标）随机访问元素。时间复杂度为 O(1)。
 
@@ -66,28 +64,28 @@
 
 ``` js
 class DynamicArray {
-    constructor(n) {
-        this.arr = new Array(n).fill(0);
-        this.size = n;
-        this.length = 0;
-    }
-    insert(v) {
-        if (this.length >= this.size) { // 扩容
-            const temp = this.arr;
-            this.size *= 2;
-            this.arr = new Array(this.size).fill(0);
-            for (let i = 0; i < temp.length; i++) {
-                this.arr[i] = temp[i];
-            }
-        } 
-        
-        this.arr[this.length++] = v;
-    }
+  constructor(n) {
+    this.arr = new Array(n).fill(0);
+    this.size = n;
+    this.length = 0;
+  }
+  insert(v) {
+    if (this.length >= this.size) { // 扩容
+      const temp = this.arr;
+      this.size *= 2;
+      this.arr = new Array(this.size).fill(0);
+      for (let i = 0; i < temp.length; i++) {
+          this.arr[i] = temp[i];
+      }
+    } 
+    
+    this.arr[this.length++] = v;
+  }
 }
 
 const arr = new DynamicArray(10);
 for (let i = 1; i <= 12; i++) {
-    arr.insert(i);
+  arr.insert(i);
 }
 ```
 
@@ -95,54 +93,54 @@ for (let i = 1; i <= 12; i++) {
 
 ``` js
 class FixedOrderedArray {
-    constructor(capacity) {
-        this.arr = new Array(capacity).fill(0);
-        this.count = 0;
-        this.size = capacity;
-    }
-    insert(element) {
-        if (this.count >= this.size) return -1; // 处理越界
-        
-        // 保证有序性
-        let j = this.count;
-        for (let i = 0; i < j; i++) {
-            if (this.arr[i] > element) {
-                let temp = element;
-                while (i < j) {
-                    this.arr[j] = this.arr[j - 1];
-                    j--;
-                }
-                this.arr[j] = temp;
-                this.count++;
-            }
+  constructor(capacity) {
+    this.arr = new Array(capacity).fill(0);
+    this.count = 0;
+    this.size = capacity;
+  }
+  insert(element) {
+    if (this.count >= this.size) return -1; // 处理越界
+    
+    // 保证有序性
+    let j = this.count;
+    for (let i = 0; i < j; i++) {
+      if (this.arr[i] > element) {
+        let temp = element;
+        while (i < j) {
+          this.arr[j] = this.arr[j - 1];
+          j--;
         }
+        this.arr[j] = temp;
+        this.count++;
+      }
+    }
 
-        if (this.count <= j)
-            this.arr[this.count++] = element;
-    }
-    remove(element) {
-        for (let i = 1; i <= this.count; i++) {
-            if (this.arr[i - 1] === element) {
-                while (i < this.count) {
-                    this.arr[i - 1] = this.arr[i];
-                    i++;
-                }
-                this.arr[i - 1] = 0;
-                this.count--;
-            }
+    if (this.count <= j)
+      this.arr[this.count++] = element;
+  }
+  remove(element) {
+    for (let i = 1; i <= this.count; i++) {
+      if (this.arr[i - 1] === element) {
+        while (i < this.count) {
+          this.arr[i - 1] = this.arr[i];
+          i++;
         }
+        this.arr[i - 1] = 0;
+        this.count--;
+      }
     }
-    modify(index, element) {
-        if (index < 0 || index >= this.count) return -1; // 处理越界
-        this.arr[index] = element;
+  }
+  modify(index, element) {
+    if (index < 0 || index >= this.count) return -1; // 处理越界
+    this.arr[index] = element;
 
-        // 保证有序性
-        for (let i = index + 1; i < this.count; i++) {
-            if (this.arr[i - 1] > this.arr[i]) {
-                [this.arr[i - 1], this.arr[i]] = [this.arr[i], this.arr[i - 1]];
-            }
-        }
+    // 保证有序性
+    for (let i = index + 1; i < this.count; i++) {
+      if (this.arr[i - 1] > this.arr[i]) {
+        [this.arr[i - 1], this.arr[i]] = [this.arr[i], this.arr[i - 1]];
+      }
     }
+  }
 }
 
 const orderedArray = new FixedOrderedArray(5);
@@ -162,28 +160,28 @@ orderedArray.modify(0, 6); // => [4, 6, 0, 0, 0]
 
 ``` js
 function merge(arr1, arr2) {
-    const m = arr1.length, n = arr2.length;
-    const arr = [];
-    let count = 0;
+  const m = arr1.length, n = arr2.length;
+  const arr = [];
+  let count = 0;
 
-    let i = 0, j = 0;
-    while (i < m || j < n) {
-        if (arr1[i] === undefined) {
-            arr[count++] = arr2[j];
-            j++;
-        } else if (arr2[j] === undefined) {
-            arr[count++] = arr1[i];
-            i++;
-        } else if (arr1[i] <= arr2[j]) {
-            arr[count++] = arr1[i];
-            i++;
-        } else {
-            arr[count++] = arr2[j];
-            j++;
-        }
+  let i = 0, j = 0;
+  while (i < m || j < n) {
+    if (arr1[i] === undefined) {
+      arr[count++] = arr2[j];
+      j++;
+    } else if (arr2[j] === undefined) {
+      arr[count++] = arr1[i];
+      i++;
+    } else if (arr1[i] <= arr2[j]) {
+      arr[count++] = arr1[i];
+      i++;
+    } else {
+      arr[count++] = arr2[j];
+      j++;
     }
+  }
 
-    return arr;
+  return arr;
 }
     
 const arr1 = [1,3,5], arr2 = [0,2,4,6];
@@ -192,17 +190,399 @@ merge(arr1, arr2); // => [0,1,2,3,4,5,6]
 
 ## 链表
 
-链表是一种根据**指针**将**元素/节点**串联起来的线性表数据结构。
+**链表**（Linked List）是一种通过**指针**(或引用)将**节点**（零散内存块）串联起来的线性表数据结构。链表的 `head` 属性指向链表的第一个节点，如果 `head` 指向 null，则为空链表。
 
-优点是插入和删除操作灵活高效。
+数组的线性顺序由**下标**决定，而链表的线性顺序由**指针**决定。
 
-缺点是查询时间复杂度高，指针需要额外的内存空间存储。
+链表的优点是插入和删除节点的操作动态高效，缺点则是每个节点的指针都需要额外存储空间，而且访问节点元素的时间复杂度是线性的。
 
-链表的类型包括单向链表、双向链表和循环链表等。
+链表有很多种类型，包括单向链表、双向链表、循环链表以及其他扩展。
+
+### 单向链表
+
+单向链表的每个节点由**数据元素**（data）和**后继指针**（next）指针组成。链表的 `head` 属性指向第一个节点为**头**（head）节点，节点 next 指针指向 null 的节点为**尾**（tail）节点。
+
+![Linked List](https://upload.wikimedia.org/wikipedia/commons/6/6d/Singly-linked-list.svg)
+
+#### 单向链表结构
+
+实现单向链表首先需要构建节点结构。
+
+``` js
+class Node {
+  constructor(data, next = null) {
+    this.data = data;
+    this.next = next;
+  }
+}
+```
+
+单向链表的结构包括一个作为指向头节点引用的 `head` 属性，以及一个用于记录链表节点总数 `count` 属性。
+
+``` js
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.count = 0;
+  }
+}
+```
+
+#### 查找操作
+
+``` js
+find(data) {
+  let curr = this.head;
+  let i = 0;
+  while (curr) {
+    if (curr.data === data) return i;
+    curr = curr.next;
+    i++;
+  }
+  return -1;
+}
+```
+
+查找操作的最好情况时间复杂度为 O(1)，最坏情况时间复杂度为 O(n)，平均情况时间复杂度为 O(<del>2/</del>n)。
+
+#### 插入操作
+
+单向链表的**插入**操作包括在链表头部、尾部和任意位置插入节点三种操作。
+
+- 从链表头部插入
+
+``` js
+prepend(data) {
+  const node = new Node(data);
+  if (!this.head) {
+    this.head = node;
+  } else {
+    node.next = this.head;
+    this.head = node;
+  }
+  this.count++;
+}
+```
+
+- 从链表尾部插入
+
+``` js
+append(data) {
+  const node = new Node(data);
+  if (!this.head) {
+    this.head = node;
+  } else {
+    let curr = this.head;
+    while (curr.next) {
+      curr = curr.next;
+    }
+    curr.next = node;
+  }
+  this.count++;
+}
+```
+
+- 任意位置插入
+
+``` js{6-7,14-15}
+insert(index, data) {
+  if (index < 0 || index > this.count) return false;
+  const node = new Node(data);
+  let curr = this.head;
+  if (index === 0) { // 链表头部
+    node.next = curr; // 插入操作
+    this.head = node; // 插入操作
+  } else { // 其他位置
+    let prev;
+    while (index-- > 0) {
+      prev = curr;
+      curr = curr.next;
+    }
+    node.next = curr; // 插入操作
+    prev.next = node; // 插入操作
+  }
+  this.count++;
+  return true;
+}
+```
+
+#### 删除操作
+
+单向链表的**删除**的操作包括删除链表头节点、删除链表尾节点和删除值等于给定值的节点。
+
+- 删除链表头节点
+
+``` js
+removeHead() {
+  if (!this.head) return false;
+  this.head = this.head.next;
+  this.count--;
+  return true;
+}
+```
+
+- 删除链表尾节点
+
+``` js
+removeTail() {
+  if (!this.head) return false;
+  if (!this.head.next) { // 链表只有一个节点
+    this.head = null;
+  } else { // 链表有很多节点
+    let curr = this.head;
+    while (curr.next) {
+      if (curr.next.next) {
+        curr = curr.next;
+      } else {
+        curr.next = null;
+      }
+    }
+  }
+  this.count--;
+  return true;
+}
+```
+
+- 删除值等于给定值的节点
+
+``` js{5,13}
+remove(data) {
+  if (!this.head) return false;
+  let isDeleted = false;
+  while (this.head && this.head.data === data) { // 头部节点
+    this.head = this.head.next; // 删除操作
+    isDeleted = true;
+    this.count--;
+  }
+  let curr = this.head;
+  if (curr) {
+    while (curr.next) { // 其他节点
+      if (curr.next.data === data) {
+        curr.next = curr.next.next; // 删除操作
+        isDeleted = true;
+        this.count--;
+      } else {
+        curr = curr.next;
+      }
+    }
+  }
+  return isDeleted;
+}
+```
+
+链表的插入和删除操作的时间复杂度为 O(1)，但从链表任意位置插入节点、删除链表尾节点和值等于给定值的节点需要遍历到目标节点，时间复杂度为 O(n)。对应遍历操作如下：
+
+``` js
+get(index) {
+  if (index < 0 || index >= this.count) return -1;
+  let curr = this.head;
+  while (index-- > 0) {
+    curr = curr.next;
+  }
+  return curr.data;
+}
+```
+
+单向链表在指定节点前插入和删除指定节点的操作并不容易实现，不过双向链表可以更简单高效的实现这两种操作。
+
+### 双向链表
+
+双向链表的每个节点由**数据元素**（data）、**前驱指针**（prev）和**后继指针**（next）构成。如果节点的 prev 指针为 null，则该节点为链表的头节点、如果节点的 next 指针为 null，则该节点为链表的尾节点。
+
+![Doubly Linked List](https://upload.wikimedia.org/wikipedia/commons/5/5e/Doubly-linked-list.svg)
+
+#### 双向链表结构
+
+首先构建双向链表的节点结构。
+
+``` js
+class Node {
+  constructor(data, prev = null, next = null) {
+    this.data = data;
+    this.prev = prev;
+    this.next = next;
+  }
+}
+```
+
+双向链表的链表结构由指向第一个节点的 `head` 和指向最后一个节点的 `tail` 属性组成。
+
+``` js
+class DoublyLinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+}
+```
+
+#### 插入操作
+
+双向链表的插入操作包括从链表头部、链表尾部和在指定节点前插入节点。
+
+- 从链表头部插入节点
+
+``` js
+prepend(data) {
+  const node = new Node(data);
+  if (!this.head) {
+    this.head = node;
+    this.tail = node;
+  } else {
+    node.next = this.head;
+    this.head.prev = node;
+    this.head = node;
+  }
+}
+```
+
+- 从链表尾部插入节点
+
+``` js
+append(data) {
+  const node = new Node(data);
+  if (!this.head) {
+    this.head = node;
+    this.tail = node;
+  } else {
+    this.tail.next = node;
+    node.prev = this.tail;
+    this.tail = node;
+  }
+}
+```
+
+- 在指定节点前插入节点
+
+``` js
+insert(target, data) {
+  const node = new Node(data);
+  let isInserted = false;
+  if (target === null) { // 链表尾部插入
+    if (!this.head) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      node.prev = this.tail;
+      this.tail = node;
+    }
+    isInserted = true;
+  } else if (this.head.data === target) { // 链表头节点前插入
+    node.next = this.head;
+    this.head.prev = node;
+    this.head = node;
+    isInserted = true;
+  } else if (this.tail.data === target) { // 链表尾节点前插入
+    node.next = this.tail;
+    this.tail.prev.next = node;
+    node.prev = this.tail.prev;
+    this.tail.prev = node;
+    isInserted = true;
+  } else { // 其他节点前插入
+    let curr = this.head;
+    while (curr && curr.data !== target) {
+      curr = curr.next;
+    }
+    if (curr) {
+      node.next = curr;
+      curr.prev.next = node;
+      node.prev = curr.prev;
+      curr.prev = node;
+      isInserted = true;
+    }
+  }
+  return isInserted;
+}
+```
+
+在双向链表插入操作中，从链表头部和尾部插入的时间复杂度都为 O(1)，而在指定节点前插入最坏情况时间复杂度为 O(n)。
+
+#### 删除操作
+
+双向链表的删除操作主要包括删除链表头节点、链表尾节点和值等于给定值的节点。
+
+- 删除链表头节点
+
+``` js
+removeHead() {
+  if (!this.head) return false;
+  if (!this.head.next) {
+    this.head = null;
+    this.tail = null;
+  } else {
+    this.head = this.head.next;
+    this.head.prev = null;
+  }
+  return true;
+}
+```
+
+- 删除链表尾节点
+
+``` js
+removeTail() {
+  if (!this.tail) return false;
+  if (!this.tail.prev) {
+    this.head = null;
+    this.tail = null;
+  } else {
+    this.tail = this.tail.prev;
+    this.tail.next = null;
+  }
+  return true;
+}
+```
+
+- 删除值等于给定值的节点
+
+``` js
+remove(data) {
+  if (!this.head) return false;
+  let isDeleted = false;
+  let curr = this.head;
+  while (curr) {
+    if (curr.data === data) {
+      if (this.head === curr) { // 删除头节点
+        this.head = this.head.next;
+        if (!this.head) {
+          this.tail = null;
+        } else {
+          this.head.prev = null;
+        }
+      } else if (this.tail === curr) { // 删除尾节点
+        this.tail = this.tail.prev;
+        this.tail.next = null;
+      } else { // 删除其他节点
+        curr.prev.next = curr.next;
+        curr.next.prev = curr.prev;
+      }
+      isDeleted = true;
+    }
+    curr = curr.next;
+  }
+  return isDeleted;
+}
+```
+
+在双向链表的删除操作中，删除链表头节点和尾节点的时间复杂度为 O(1)，而删除值等于给定值的节点的最坏情况时间复杂度为 O(n)。
+
+可以通过**哨兵**来简化处理空链表边界条件的处理，从而简化链表代码。
 
 ### 实现
 
 - LRU 缓存淘汰算法
+
+LRU（Least Recently Used，最近最少使用）缓存淘汰算法。
+
+原理是访问数据时：
+
+- 如果该数据不存在于缓存中：
+  - 如果缓存未满，则将该数据插入到缓存头部；
+  - 如果缓存已满，则将删除缓存末尾数据，然后将该数据插入到缓存头部；
+- 如果该数据存在于缓存中，则将数据从原始位置挪动到缓存头部。
+
+可以使用双向链表或者哈希表实现 LRU 算法。
 
 ## 栈
 
@@ -274,17 +654,17 @@ merge(arr1, arr2); // => [0,1,2,3,4,5,6]
 
 ``` js
 function bubbleSort1(arr) {
-    let n = arr.length;
-    if (n <= 1) return;
+  let n = arr.length;
+  if (n <= 1) return;
 
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n - 1 - i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            }
-        }
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+          [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
     }
-    return arr;
+  }
+  return arr;
 }
 ```
 
@@ -292,20 +672,20 @@ function bubbleSort1(arr) {
 
 ``` js
 function bubbleSort2(arr) {
-    let n = arr.length;
-    if (n <= 1) return;
+  let n = arr.length;
+  if (n <= 1) return;
 
-    for (let i = 0; i < n; i++) {
-        let flag = false;
-        for (let j = 0; j < n - 1 - i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                flag = true;
-            }
-        }
-        if (!flag) break;
+  for (let i = 0; i < n; i++) {
+    let flag = false;
+    for (let j = 0; j < n - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        flag = true;
+      }
     }
-    return arr;
+    if (!flag) break;
+  }
+  return arr;
 }
 ```
 
@@ -319,18 +699,18 @@ function bubbleSort2(arr) {
 
 ``` js
 function insertionSort(arr) {
-    if (arr.length <= 1) return;
+  if (arr.length <= 1) return;
 
-    for (let i = 1; i < arr.length; i++) {
-        let value = arr[i];
-        let j = i - 1;
-        while (j >= 0 && arr[j] > value) {
-            arr[j + 1] = arr[j];
-            j -= 1;
-        }
-        arr[j + 1] = value;
+  for (let i = 1; i < arr.length; i++) {
+    let value = arr[i];
+    let j = i - 1;
+    while (j >= 0 && arr[j] > value) {
+      arr[j + 1] = arr[j];
+      j -= 1;
     }
-    return arr;
+    arr[j + 1] = value;
+  }
+  return arr;
 }
 ```
 
@@ -344,18 +724,18 @@ function insertionSort(arr) {
 
 ``` js
 function selectionSort(arr) {
-    let n = arr.length;
-    for (let i = 0; i < n - 1; i++) {
-        let min = i;
-        for (let j = i + 1; j < n; j++) {
-            if (arr[min] > arr[j]) min = j;
-        }
-
-        if (min !== i) {
-            [arr[min], arr[i]] = [arr[i], arr[min]];
-        }
+  let n = arr.length;
+  for (let i = 0; i < n - 1; i++) {
+    let min = i;
+    for (let j = i + 1; j < n; j++) {
+      if (arr[min] > arr[j]) min = j;
     }
-    return arr;
+
+    if (min !== i) {
+      [arr[min], arr[i]] = [arr[i], arr[min]];
+    }
+  }
+  return arr;
 }
 ```
 
@@ -375,20 +755,20 @@ function selectionSort(arr) {
 
 ``` js
 function mergeSort(arr) {
-    if (arr.length <= 1) return arr;
-    let middle = Math.trunc(arr.length / 2);
-    let left = arr.slice(0, middle);
-    let right = arr.slice(middle);
-    return merge(mergeSort(left), mergeSort(right));
+  if (arr.length <= 1) return arr;
+  let middle = Math.trunc(arr.length / 2);
+  let left = arr.slice(0, middle);
+  let right = arr.slice(middle);
+  return merge(mergeSort(left), mergeSort(right));
 }
 
 function merge(left, right) {
-    const result = [];
-    while(left.length > 0 && right.length > 0) {
-        if(left[0] < right[0]) result.push(left.shift());
-        else result.push(right.shift());
-    }
-    return result.concat(left, right);
+  const result = [];
+  while(left.length > 0 && right.length > 0) {
+    if(left[0] < right[0]) result.push(left.shift());
+    else result.push(right.shift());
+  }
+  return result.concat(left, right);
 }
 mergeSort([3, 7, 1, 6, 2, 5, 4]);
 ```
@@ -405,26 +785,26 @@ mergeSort([3, 7, 1, 6, 2, 5, 4]);
 
 ``` js
 function quickSort(arr, p, r) {
-    if (p < r) {
-        let q = partition(arr, p, r);
-        quickSort(arr, p, q - 1);
-        quickSort(arr, q + 1, r);
-    }
+  if (p < r) {
+    let q = partition(arr, p, r);
+    quickSort(arr, p, q - 1);
+    quickSort(arr, q + 1, r);
+  }
 }
 
 function partition(arr, p, r) {
-    let x = arr[r];
-    let i = p;
-    for (let j = p; j < r; j++) {
-        if (arr[j] <= x) {
-            if (i !== j) {
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            i++;
-        }
+  let x = arr[r];
+  let i = p;
+  for (let j = p; j < r; j++) {
+    if (arr[j] <= x) {
+      if (i !== j) {
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      i++;
     }
-    [arr[i], arr[r]] = [arr[r], arr[i]];
-    return i;
+  }
+  [arr[i], arr[r]] = [arr[r], arr[i]];
+  return i;
 }
 
 const arr = [2, 8, 7, 1, 3, 5, 6, 4];
@@ -454,34 +834,33 @@ quickSort(arr, 0, arr.length - 1);
 
 ``` js
 function countingSort(A) {
-    debugger;
-    let n = A.length;
-    if (n <= 1) return;
+  let n = A.length;
+  if (n <= 1) return;
 
-    let max = A[0];
-    for (let i = 0; i < n; i++) {
-        if (max < A[i]) {
-            max = A[i];
-        }
+  let max = A[0];
+  for (let i = 0; i < n; i++) {
+    if (max < A[i]) {
+        max = A[i];
     }
+  }
 
-    let C = new Array(max + 1).fill(0);
+  let C = new Array(max + 1).fill(0);
 
-    for (let i = 0; i < n; i++) {
-        C[A[i]]++;
-    }
+  for (let i = 0; i < n; i++) {
+    C[A[i]]++;
+  }
 
-    for (let i = 1; i <= max; i++) {
-        C[i] = C[i - 1] + C[i];
-    }
+  for (let i = 1; i <= max; i++) {
+    C[i] = C[i - 1] + C[i];
+  }
 
-    let B = [];
-    for (let i = n - 1; i >= 0; i--) {
-        let index = C[A[i]] - 1;
-        B[index] = A[i];
-        C[A[i]]--;
-    }
-    return B;
+  let B = [];
+  for (let i = n - 1; i >= 0; i--) {
+    let index = C[A[i]] - 1;
+    B[index] = A[i];
+    C[A[i]]--;
+  }
+  return B;
 }
 countingSort([2, 5, 3, 0, 2, 3, 0, 3]);
 ```
@@ -496,26 +875,25 @@ countingSort([2, 5, 3, 0, 2, 3, 0, 3]);
 
 ``` js
 function radixSort(arr) {
-    debugger;
-    const max = Math.max(...arr);
-    let digit = `${max}`.length;
-    let start = 1;
-    let buckets = [];
-    while(digit > 0) {
-        start *= 10;
-        for (let i = 0; i < arr.length; i++) {
-            const index = arr[i] % start;
-            !buckets[index] && (buckets[index] = []);
-            buckets[index].push(arr[i]);
-        }
-        arr = [];
-        for (let i = 0; i < buckets.length; i++) {
-            buckets[i] && (arr = arr.concat(buckets[i]));
-        }
-        buckets = [];
-        digit--;
+  const max = Math.max(...arr);
+  let digit = `${max}`.length;
+  let start = 1;
+  let buckets = [];
+  while(digit > 0) {
+    start *= 10;
+    for (let i = 0; i < arr.length; i++) {
+      const index = arr[i] % start;
+      !buckets[index] && (buckets[index] = []);
+      buckets[index].push(arr[i]);
     }
-    return arr;
+    arr = [];
+    for (let i = 0; i < buckets.length; i++) {
+      buckets[i] && (arr = arr.concat(buckets[i]));
+    }
+    buckets = [];
+    digit--;
+  }
+  return arr;
 }
 radixSort([1, 10, 100, 1000, 98, 67, 3, 28, 67, 888, 777])
 ```
@@ -530,34 +908,33 @@ radixSort([1, 10, 100, 1000, 98, 67, 3, 28, 67, 888, 777])
 
 ``` js
 function bucketSort(arr, count = 5) {
-    if (arr.length <= 1) return arr;
+  if (arr.length <= 1) return arr;
 
-    const max = Math.max(...arr);
-    const min = Math.min(...arr);
-    const buckets = [];
-    const size = Math.floor((max - min) / count) + 1;
-    
-    for (let i = 0; i < arr.length; i++) {
-        const index = ~~(arr[i] / size); // Math.floor((arr[i] - min) / size)
-        if (!buckets[index]) {
-            buckets[index] = [];
-            buckets[index].push(arr[i]);
-        } else {
-            let len = buckets[index].length - 1;
-            while (len >= 0 && buckets[index][len] > arr[i]) {
-                buckets[index][len + 1] = buckets[index][len];
-                len--;
-            }
-            buckets[index][len + 1] = arr[i];
-        }
-        
+  const max = Math.max(...arr);
+  const min = Math.min(...arr);
+  const buckets = [];
+  const size = Math.floor((max - min) / count) + 1;
+  
+  for (let i = 0; i < arr.length; i++) {
+    const index = ~~(arr[i] / size); // Math.floor((arr[i] - min) / size)
+    if (!buckets[index]) {
+      buckets[index] = [];
+      buckets[index].push(arr[i]);
+    } else {
+      let len = buckets[index].length - 1;
+      while (len >= 0 && buckets[index][len] > arr[i]) {
+        buckets[index][len + 1] = buckets[index][len];
+        len--;
+      }
+      buckets[index][len + 1] = arr[i];
     }
+  }
 
-    let wrapBuckets = [];
-    for (let i = 0; i < buckets.length; i++) {
-        if (buckets[i]) wrapBuckets = wrapBuckets.concat(buckets[i]);
-    }
-    return wrapBuckets;
+  let wrapBuckets = [];
+  for (let i = 0; i < buckets.length; i++) {
+    if (buckets[i]) wrapBuckets = wrapBuckets.concat(buckets[i]);
+  }
+  return wrapBuckets;
 }
 bucketSort([11, 9, 6, 8, 1, 3, 5, 1, 1, 0, 100], 10);
 ```
@@ -579,16 +956,16 @@ bucketSort([11, 9, 6, 8, 1, 3, 5, 1, 1, 0, 100], 10);
 
 ``` js
 function binarySearch(nums, target) {
-    let lo = 0, hi = nums.length - 1;
+  let lo = 0, hi = nums.length - 1;
 
-    while (lo <= hi) {
-        let mid = Math.floor((lo + hi) / 2);
-        if (nums[mid] === target) return mid;
-        if (nums[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
+  while (lo <= hi) {
+    let mid = Math.floor((lo + hi) / 2);
+    if (nums[mid] === target) return mid;
+    if (nums[mid] < target) lo = mid + 1;
+    else hi = mid - 1;
+  }
 
-    return -1;
+  return -1;
 }
 binarySearch([1, 3, 5, 7, 9, 10, 11, 12, 14, 15, 19, 20], 4); // => -1
 ```
@@ -597,16 +974,16 @@ binarySearch([1, 3, 5, 7, 9, 10, 11, 12, 14, 15, 19, 20], 4); // => -1
 
 ``` js
 function binarySearch(nums, target) {
-    const search = (lo, hi) => {
-        if (lo > hi) return -1;
+  const search = (lo, hi) => {
+    if (lo > hi) return -1;
 
-        let mid = Math.floor((lo + hi) / 2);
-        if (nums[mid] === target) return mid;
-        if (nums[mid] < target) return search(mid + 1, hi);
-        return search(lo, mid - 1);
-    }
+    let mid = Math.floor((lo + hi) / 2);
+    if (nums[mid] === target) return mid;
+    if (nums[mid] < target) return search(mid + 1, hi);
+    return search(lo, mid - 1);
+  }
 
-    return search(0, nums.length - 1); 
+  return search(0, nums.length - 1); 
 }
 binarySearch([1, 3, 5, 7, 9, 10, 11, 12, 14, 15, 19, 20], 20); // => 11
 ```
@@ -621,15 +998,15 @@ binarySearch([1, 3, 5, 7, 9, 10, 11, 12, 14, 15, 19, 20], 20); // => 11
 
 ``` js
 const binarySearch = (nums, target) => {
-    let lo = 0, hi = nums.length - 1;
+  let lo = 0, hi = nums.length - 1;
 
-    while (lo <= hi) {
-        let mid = lo + (hi - lo >> 1);
-        if (nums[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
+  while (lo <= hi) {
+    let mid = lo + (hi - lo >> 1);
+    if (nums[mid] < target) lo = mid + 1;
+    else hi = mid - 1;
+  }
 
-    return lo < nums.length && nums[lo] === target ? lo : - 1;
+  return lo < nums.length && nums[lo] === target ? lo : - 1;
 };
 binarySearch([1, 1, 1, 1, 1, 1], 1); // => 0
 binarySearch([0, 1, 2, 2, 2, 3], 2); // => 2
@@ -641,15 +1018,15 @@ binarySearch([0, 1, 2, 3, 3, 3], 4); // => -1
 
 ``` js
 const binarySearch = (nums, target) => {
-    let lo = 0, hi = nums.length - 1;
+  let lo = 0, hi = nums.length - 1;
 
-    while (lo <= hi) {
-        let mid = lo + (hi - lo >> 1);
-        if (nums[mid] > target) hi = mid - 1;
-        else lo = mid + 1;
-    }
+  while (lo <= hi) {
+    let mid = lo + (hi - lo >> 1);
+    if (nums[mid] > target) hi = mid - 1;
+    else lo = mid + 1;
+  }
 
-    return hi >= 0 && nums[hi] === target ? hi : -1;
+  return hi >= 0 && nums[hi] === target ? hi : -1;
 };
 binarySearch([1, 1, 1, 1, 1, 1], 1); // => 5
 binarySearch([0, 1, 2, 2, 2, 3], 2); // => 4
@@ -661,15 +1038,15 @@ binarySearch([0, 1, 2, 3, 3, 3], 4); // => -1
 
 ``` js
 const binarySearch = (nums, target) => {
-    let lo = 0, hi = nums.length - 1;
+  let lo = 0, hi = nums.length - 1;
 
-    while (lo <= hi) {
-        let mid = lo + (hi - lo >> 1);
-        if (nums[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
+  while (lo <= hi) {
+    let mid = lo + (hi - lo >> 1);
+    if (nums[mid] < target) lo = mid + 1;
+    else hi = mid - 1;
+  }
 
-    return hi >= 0 ? hi : -1;
+  return hi >= 0 ? hi : -1;
 };
 binarySearch([1, 3, 5, 7, 9], 8); // => 3
 binarySearch([1, 3, 5, 7, 9], 0); // => -1
@@ -679,15 +1056,15 @@ binarySearch([1, 3, 5, 7, 9], 0); // => -1
 
 ``` js
 const binarySearch = (nums, target) => {
-    let lo = 0, hi = nums.length - 1;
+  let lo = 0, hi = nums.length - 1;
 
-    while (lo <= hi) {
-        let mid = lo + (hi - lo >> 1);
-        if (nums[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
+  while (lo <= hi) {
+    let mid = lo + (hi - lo >> 1);
+    if (nums[mid] < target) lo = mid + 1;
+    else hi = mid - 1;
+  }
 
-    return lo < nums.length ? lo : -1;
+  return lo < nums.length ? lo : -1;
 };
 binarySearch([1, 3, 5, 7, 9], 6); // => 3
 binarySearch([1, 3, 5, 7, 9], 10); // => -1
@@ -906,16 +1283,16 @@ heapifyDown(arr, i) {
 build(arr) {
   this.size = arr.length - 1;
   for (let i = Math.floor(arr.length / 2); i >= 1; i--) {
-      this.heapifyDown(arr, i);
+    this.heapifyDown(arr, i);
   }
 }
 
 sort(arr) {
   this.build(arr);
   for (let i = this.size; i > 0; i--) {
-      this.swap(arr, 1, i);
-      this.size--;
-      this.heapifyDown(arr, 1);
+    this.swap(arr, 1, i);
+    this.size--;
+    this.heapifyDown(arr, 1);
   }
   return arr;
 }
