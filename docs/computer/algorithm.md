@@ -196,7 +196,7 @@ merge(arr1, arr2); // => [0,1,2,3,4,5,6]
 
 链表的优点是插入和删除节点的操作动态高效，缺点则是每个节点的指针都需要额外存储空间，而且访问节点元素的时间复杂度是线性的。
 
-链表有很多种类型，包括单向链表、双向链表、循环链表以及其他扩展。
+链表有很多种类型，包括单向链表、双向链表、循环链表以及其他扩展。接下来将介绍单向链表和双向链表两种链表的原理及实现。
 
 ### 单向链表
 
@@ -217,13 +217,13 @@ class Node {
 }
 ```
 
-单向链表的结构包括一个作为指向头节点引用的 `head` 属性，以及一个用于记录链表节点总数 `count` 属性。
+单向链表的结构包括一个作为指向头节点引用的 `head` 属性，以及一个用于记录链表节点总数 `size` 属性。
 
 ``` js
 class LinkedList {
   constructor() {
     this.head = null;
-    this.count = 0;
+    this.size = 0;
   }
 }
 ```
@@ -260,7 +260,7 @@ prepend(data) {
     node.next = this.head;
     this.head = node;
   }
-  this.count++;
+  this.size++;
 }
 ```
 
@@ -278,7 +278,7 @@ append(data) {
     }
     curr.next = node;
   }
-  this.count++;
+  this.size++;
 }
 ```
 
@@ -286,7 +286,7 @@ append(data) {
 
 ``` js{6-7,14-15}
 insert(index, data) {
-  if (index < 0 || index > this.count) return false;
+  if (index < 0 || index > this.size) return false;
   const node = new Node(data);
   let curr = this.head;
   if (index === 0) { // 链表头部
@@ -301,7 +301,7 @@ insert(index, data) {
     node.next = curr; // 插入操作
     prev.next = node; // 插入操作
   }
-  this.count++;
+  this.size++;
   return true;
 }
 ```
@@ -316,7 +316,7 @@ insert(index, data) {
 removeHead() {
   if (!this.head) return false;
   this.head = this.head.next;
-  this.count--;
+  this.size--;
   return true;
 }
 ```
@@ -338,7 +338,7 @@ removeTail() {
       }
     }
   }
-  this.count--;
+  this.size--;
   return true;
 }
 ```
@@ -352,7 +352,7 @@ remove(data) {
   while (this.head && this.head.data === data) { // 头部节点
     this.head = this.head.next; // 删除操作
     isDeleted = true;
-    this.count--;
+    this.size--;
   }
   let curr = this.head;
   if (curr) {
@@ -360,7 +360,7 @@ remove(data) {
       if (curr.next.data === data) {
         curr.next = curr.next.next; // 删除操作
         isDeleted = true;
-        this.count--;
+        this.size--;
       } else {
         curr = curr.next;
       }
@@ -374,7 +374,7 @@ remove(data) {
 
 ``` js
 get(index) {
-  if (index < 0 || index >= this.count) return -1;
+  if (index < 0 || index >= this.size) return -1;
   let curr = this.head;
   while (index-- > 0) {
     curr = curr.next;
@@ -384,6 +384,8 @@ get(index) {
 ```
 
 单向链表在指定节点前插入和删除指定节点的操作并不容易实现，不过双向链表可以更简单高效的实现这两种操作。
+
+可以通过**哨兵**来简化处理空链表边界条件的处理，从而简化链表代码。下面将使用哨兵优化双向链表结构。
 
 ### 双向链表
 
@@ -405,34 +407,37 @@ class Node {
 }
 ```
 
-双向链表的链表结构由指向第一个节点的 `head` 和指向最后一个节点的 `tail` 属性组成。
+双向链表的链表结构由指向头节点的 `head` 和指向尾节点的 `tail` 以及记录链表节点数量的 `size` 属性组成。
 
 ``` js
 class DoublyLinkedList {
   constructor() {
-    this.head = null;
-    this.tail = null;
+    this.head = new Node('dummyHead'); // 哨兵
+    this.tail = new Node('dummyTail'); // 哨兵
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+    this.size = 0;
   }
 }
 ```
 
 #### 插入操作
 
-双向链表的插入操作包括从链表头部、链表尾部和在指定节点前插入节点。
+![Doubly Linked List Insert](./images/algorithm/doubly-linked-list-insert.jpg)
+
+双向链表的插入操作主要包括从链表头部、链表尾部和在指定节点前插入节点。
 
 - 从链表头部插入节点
 
 ``` js
 prepend(data) {
   const node = new Node(data);
-  if (!this.head) {
-    this.head = node;
-    this.tail = node;
-  } else {
-    node.next = this.head;
-    this.head.prev = node;
-    this.head = node;
-  }
+  const successor = this.head.next;
+  node.next = this.head.next;
+  this.head.next = node;
+  successor.prev = node;
+  node.prev = this.head;
+  this.size++;
 }
 ```
 
@@ -441,79 +446,46 @@ prepend(data) {
 ``` js
 append(data) {
   const node = new Node(data);
-  if (!this.head) {
-    this.head = node;
-    this.tail = node;
-  } else {
-    this.tail.next = node;
-    node.prev = this.tail;
-    this.tail = node;
-  }
+  const precursor = this.tail.prev;
+  node.next = this.tail;
+  precursor.next = node;
+  this.tail.prev = node;
+  node.prev = precursor;
+  this.size++;
 }
 ```
 
 - 在指定节点前插入节点
 
-``` js
-insert(target, data) {
-  const node = new Node(data);
-  let isInserted = false;
-  if (target === null) { // 链表尾部插入
-    if (!this.head) {
-      this.head = node;
-      this.tail = node;
-    } else {
-      this.tail.next = node;
-      node.prev = this.tail;
-      this.tail = node;
-    }
-    isInserted = true;
-  } else if (this.head.data === target) { // 链表头节点前插入
-    node.next = this.head;
-    this.head.prev = node;
-    this.head = node;
-    isInserted = true;
-  } else if (this.tail.data === target) { // 链表尾节点前插入
-    node.next = this.tail;
-    this.tail.prev.next = node;
-    node.prev = this.tail.prev;
-    this.tail.prev = node;
-    isInserted = true;
-  } else { // 其他节点前插入
-    let curr = this.head;
-    while (curr && curr.data !== target) {
-      curr = curr.next;
-    }
-    if (curr) {
-      node.next = curr;
-      curr.prev.next = node;
-      node.prev = curr.prev;
-      curr.prev = node;
-      isInserted = true;
-    }
-  }
-  return isInserted;
+``` js {3-6}
+insert(node1, node2) { // 插入节点 node2（在已知后继节点 node1 的情况下）
+  const precursor = node1.prev;
+  node2.next = node1;
+  precursor.next = node2;
+  node1.prev = node2;
+  node2.prev = precursor;
+  this.tail.prev = node1;
+  this.size++;
 }
 ```
 
-在双向链表插入操作中，从链表头部和尾部插入的时间复杂度都为 O(1)，而在指定节点前插入最坏情况时间复杂度为 O(n)。
+在双向链表插入操作中，从链表头部、尾部插入和指定节点前插入节点的时间复杂度都为 O(1)。
 
 #### 删除操作
 
-双向链表的删除操作主要包括删除链表头节点、链表尾节点和值等于给定值的节点。
+![Doubly Linked List Insert](./images/algorithm/doubly-linked-list-remove.jpg)
+
+双向链表的删除操作主要包括删除链表头节点、链表尾节点和指定节点。
 
 - 删除链表头节点
 
 ``` js
 removeHead() {
-  if (!this.head) return false;
-  if (!this.head.next) {
-    this.head = null;
-    this.tail = null;
-  } else {
-    this.head = this.head.next;
-    this.head.prev = null;
-  }
+  if (this.size === 0) return false;
+  const successor = this.head.next.next;
+  this.head.next = successor;
+  successor.prev = this.head;
+  this.size--;
   return true;
 }
 ```
@@ -522,53 +494,30 @@ removeHead() {
 
 ``` js
 removeTail() {
-  if (!this.tail) return false;
-  if (!this.tail.prev) {
-    this.head = null;
-    this.tail = null;
-  } else {
-    this.tail = this.tail.prev;
-    this.tail.next = null;
-  }
+  if (this.size === 0) return false;
+  const precursor = this.tail.prev.prev;
+  precursor.next = this.tail;
+  this.tail.prev = precursor;
+  this.size--;
   return true;
 }
 ```
 
-- 删除值等于给定值的节点
+- 删除指定节点
 
-``` js
-remove(data) {
-  if (!this.head) return false;
-  let isDeleted = false;
-  let curr = this.head;
-  while (curr) {
-    if (curr.data === data) {
-      if (this.head === curr) { // 删除头节点
-        this.head = this.head.next;
-        if (!this.head) {
-          this.tail = null;
-        } else {
-          this.head.prev = null;
-        }
-      } else if (this.tail === curr) { // 删除尾节点
-        this.tail = this.tail.prev;
-        this.tail.next = null;
-      } else { // 删除其他节点
-        curr.prev.next = curr.next;
-        curr.next.prev = curr.prev;
-      }
-      isDeleted = true;
-    }
-    curr = curr.next;
-  }
-  return isDeleted;
+``` js {3-4}
+remove(node) {
+  if (this.size === 0) return false;
+  node.prev.next = node.next;
+  node.next.prev = node.prev;
+  this.size--;
+  return true;
 }
 ```
 
-在双向链表的删除操作中，删除链表头节点和尾节点的时间复杂度为 O(1)，而删除值等于给定值的节点的最坏情况时间复杂度为 O(n)。
+在双向链表的删除操作中，删除链表头节点、尾节点和指定节点的时间复杂度为 O(1)。
 
-可以通过**哨兵**来简化处理空链表边界条件的处理，从而简化链表代码。
-
+双向链表并不是所有插入和删除操作的时间复杂度都是 O(1)，如果在指定值前/后插入节点或者删除值等于指定值的节点时，由于在插入和删除之前需要遍历链表，所以这两种操作的时间复杂度为 O(n)。
 ### 实现
 
 - LRU 缓存淘汰算法
