@@ -559,7 +559,7 @@ remove(node) {
 
 双向链表除了以上插入和删除操作外，在指定值前/后插入节点或者删除值等于指定值的节点时，由于在插入和删除之前需要遍历链表，所以需要 O(n) 的时间复杂度。
 
-### 实现
+### 应用场景
 
 - LRU 缓存淘汰算法
 
@@ -576,43 +576,372 @@ LRU（Least Recently Used，最近最少使用）缓存淘汰算法。
 
 ## 栈
 
-栈是一种**先进后出**（LIFO, Last In First Out）的**操作受限**线性表数据结构。只能在一端添加或删除数据。
+**栈**（Stack）是一种**后进先出**（LIFO, Last In First Out）的线性表数据结构或者抽象数据类型。类似于一个弹夹，只能在弹夹头部（栈顶）压入和弹出子弹。
 
-### 实现
+栈的操作主要包括**压入**（push）和**弹出**（pop）操作，这两个操作的时间复杂度为 O(1)。
 
-栈可以用数组、链表和队列来实现。
+栈可以基于数组和链表数据结构实现。
 
-- 使用数组实现栈
+### 基于数组实现栈
 
-- 使用链表实现栈
+基于数组实现的栈结构包括一个保存栈顶元素的 `top` 指针、一个存储栈元素的 `items` 数组和指定栈容量的 `size` 属性。
 
-- 使用队列实现栈
+``` js
+class ArrayBasedStack {
+  constructor(capacity) {
+    this.top = 0;
+    this.items = new Array(capacity);
+    this.size = capacity;
+  }
+}
+```
 
-### 运用
+1. 基于固定大小数组的定容栈
 
-我们日常开发中的函数调用、表达是求值、括号匹配、浏览器的前进后退等场景都可以使用栈来求解。
+压入操作将元素压入栈顶同时将 `top` 指针指向新元素，如果当前栈已满，将不再压入数据。
+
+``` js
+push(data) {
+  if (this.isFull()) return;
+  this.items[this.top++] = data;
+}
+```
+
+弹出操作将返回栈顶元素同时将 `top` 指针指向已弹出元素的下一个元素，如果当前栈为空，执行弹出操作将不再弹出数据。
+
+``` js
+pop() {
+  if (this.isEmpty()) return;
+  return this.items[--this.top];
+}
+```
+
+压入和弹出操作需要考虑上溢和下溢情况，时间复杂度为 O(1)。
+
+2. 基于动态数组的栈
+
+由于我们使用的是数组数据结构，这就意味着我们需要事先指定栈的容量。如果指定的容量太小，当栈满后则无法将数据压入栈中；如果指定的容量太大，当栈内元素非常少甚至为空时将会浪费大量存储空间。我们可以使用动态数组来解决定容栈栈空间固定的问题，并且彻底删除已弹出的栈元素但还保存在动态数组中的元素。
+
+在压入操作中，如果栈满，我们首先把原数组扩容两倍，并依次将元素搬移到扩容数组中，最后进行入栈操作。
+
+``` js
+push(data) {
+  if (this.isFull()) {
+    this.size *= 2;
+    const temp = new Array(this.size);
+    for (let i = 0; i < this.top; i++) {
+      temp[i] = this.items[i];
+    }
+    this.items = temp;
+  }
+  this.items[this.top++] = data;
+}
+```
+
+由于扩容需要 O(n) 的时间搬移数据，所以基于动态数组实现栈的压入操作最好情况时间复杂为 O(1)，最坏情况时间复杂度为 O(n)，而通过均摊分析将搬移数据所需时间均摊给每次 O(1) 的压入操作，得到平均情况时间复杂度为 O(1)。
+
+在弹出操作中，我们首先进行弹出操作，并把栈顶元素从动态数组中删除，避免弹出元素占用数组空间问题；然后如果当前栈内元素数量为数组的四分之一时，我们将数组缩容到原来的一半；最后将弹出操作前记录的栈顶元素返回。
+
+``` js
+pop() {
+  if (this.isEmpty()) return;
+  this.top--;
+  const item = this.items[this.top];
+  delete this.items[this.top];
+  if (this.top > 0 && this.top === Math.floor(this.items.length / 4)) {
+    this.items.length = Math.floor(this.items.length / 2);
+  }
+  return item;
+}
+```
+
+基于动态数组实现栈的弹出操作需要考虑下溢情况，时间复杂度为 O(1)。
+
+以下是基于数组实现栈的其他操作：
+
+``` js
+peek() {
+  return this.items[this.top - 1];
+}
+isEmpty() {
+  return this.top === 0;
+}
+isFull() {
+  return this.top === this.size;
+}
+```
+
+基于动态数组实现栈的优点是压入和弹出操作可以根据栈空间使用情况动态扩容和缩容，但压入操作的最坏情况时间复杂度为 O(n)。
+
+### 基于链表实现栈
+
+基于链表实现栈的结构同样需要一个 `top` 属性记录当前栈元素数量，只不过使用单链表来存储栈元素。
+
+``` js
+class LinkedListBasedStack {
+  constructor() {
+    this.top = 0;
+    this.head = null;
+  }
+}
+```
+
+压入和弹出操作思路是从链表头部插入和删除元素并更新 `top` 指针即可，节点结构请参考单向链表节点结构。
+
+``` js
+push(data) {
+  const node = new Node(data);
+  if (this.head) node.next = this.head;
+  this.head = node;
+  this.top++;
+}
+pop() {
+  if (this.isEmpty()) return;
+  let val = this.peek();
+  this.head = this.head.next;
+  this.top--;
+  return val;
+}
+```
+
+基于链表实现的栈压入和弹出操作时间复杂度为 O(1)。
+
+基于链表实现的栈的其他操作：
+
+``` js
+peek() {
+  return this.head.data;
+}
+isEmpty() {
+  return this.top === 0;
+}
+```
+
+基于链表实现栈的优点是可以灵活动态的将数据压入和弹出，但创建链表节点需要额外存储空间存放节点指针。
+
+### 应用场景
+
+- 函数调用
+- 算数表达式求值
+- 括号匹配
+- 浏览器的前进后退功能
+- 递归
+- 回溯
+- 深度优先搜索
 
 ## 队列
 
-队列是一种**先进先出**（FIFO, First-In-First-Out）的**操作受限**线性表数据结构。只能在一端添加数据在另一端删除数据。
+**队列**（Queue）是一种**先进先出**（FIFO, First-In-First-Out）的线性表数据结构或者抽象数据类型。类似于排队买票，依次从**队尾**（tail）排队等待，从**队头**（head）取票。
 
-队列同样也可以用数组和链表实现，也可以用栈来实现，实现队列时需要考虑队头和队尾两个指针，其中队尾指针并不存储数据，队列的出队和入队其实就是通过移动这两个指针来完成的。
+队列主要包括**入队**（enqueue）和**出队**（dequeue）操作，这两个操作的时间复杂度为 O(1)。
 
-### 实现
+队列可以基于数组和链表实现。
 
-- 使用数组实现队列
+### 基于数组实现队列
 
-- 循环队列
+以下是使用定容数组实现的队列：
 
-- 循环双端队列
+``` js
+class ArrayBasedQueue {
+  constructor(capacity) {
+    this.items = new Array(capacity);
+    this.size = capacity;
+    this.head = 0;
+    this.tail = 0;
+  }
+  enqueue(data) {
+    if (this.isFull()) return;
+    this.items[this.tail++] = data;
+  }
+  dequeue() {
+    if (this.isEmpty()) return;
+    return this.items[this.head++];
+  }
+  isEmpty() {
+    return this.head === this.tail;
+  }
+  isFull() {
+    return this.tail === this.size;
+  }
+}
+```
 
-- 使用链表实现队列
+基于定容数组实现的队列入队和出队需要考虑溢出和下溢情况。入队时将数据插入到 `tail` 指针指向的位置，并将 `tail` 指针向右移动一位；出队时也是将 `head` 指针向右移动一位。
 
-- 使用栈实现队列
+如果 `tail` 指针移动到数组最右边，即便队列还有空间或者队列为空也无法插入数据。这就需要通过数据搬移来利用剩余空间，这将导致入队操作的时间复杂度为 O(n)。
 
-### 运用
+### 基于链表实现队列
 
-队列经常用在资源受限的场景。
+也可以基于单向链表和双向链表实现队列，以下是使用单向链表实现的队列，节点结构请参考单向链表节点结构。
+
+``` js
+class LinkedListBasedQueue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+  enqueue(data) {
+    const node = new Node(data);
+    if (!this.tail) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      this.tail = this.tail.next;
+    }
+    this.size++;
+  }
+  dequeue() {
+    if (!this.head) return;
+    const val = this.head.data;
+    this.head = this.head.next;
+    if (!this.head) this.tail = null;
+    this.size--;
+    return val;
+  }
+}
+```
+
+使用单向链表的思路是在原链表的基础上添加一个指向尾节点的 `tail` 指针即可，入队操作通过 `tail` 指针在链表尾部添加元素，出队操作则是将链表头节点指向其后继节点即可，出队需考虑下溢情况。
+
+### 循环队列
+
+由于基于定容数组实现的队列在 `tail` 指针移动到数组最右边时需要搬移数据，这导致入队操作的时间复杂度为 O(n)，可使用取余运算模拟循环队列在避免数据搬移的情况下提高剩余存储空间的利用率，将入队操作的时间复杂度优化到 O(1)。
+
+1. 基于数组实现循环队列
+
+``` js {11,16,23}
+class ArrayCircularQueue {
+  constructor(capacity) {
+    this.items = new Array(capacity);
+    this.size = capacity;
+    this.head = 0;
+    this.tail = 0;
+  }
+  enqueue(data) {
+    if (this.isFull()) return;
+    this.items[this.tail] = data;
+    this.tail = (this.tail + 1) % this.size;
+  }
+  dequeue() {
+    if (this.isEmpty()) return;
+    const val = this.items[this.head];
+    this.head = (this.head + 1) % this.size;
+    return val;
+  }
+  isEmpty() {
+    return this.head === this.tail;
+  }
+  isFull() {
+    return this.head === (this.tail + 1) % this.size;
+  }
+}
+```
+
+基于数组实现的循环队列会浪费一个储存空间来处理队列为空和队满的条件。
+
+2. 基于链表实现循环队列
+
+以下是基于单向链表实现的循环队列，创建节点请参考单向链表节点结构。
+
+``` js
+class LinkedListCircularQueue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+  enqueue(data) {
+    const node = new Node(data);
+    if (!this.tail) this.head = node; // 链表为空
+    else this.tail.next = node;
+    this.tail = node;
+    this.tail.next = this.head;
+    this.size++;
+  }
+  dequeue() {
+    if (!this.head) return; // 链表为空
+    const val = this.head.data;
+    this.head = this.head.next;
+    this.size--;
+    return val;
+  }
+}
+```
+
+入队操作需要将新节点的 `next` 指针指向头节点，出队操作只需删除头节点即可。
+
+### 双端队列
+
+双端队列可以在两端进行入队和出队操作。
+
+以下是基于双向链表实现的双端队列，创建节点请参考双向链表节点结构。
+
+``` js
+class DoublyEndedQueue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+  push(data) { // 后端入队
+    const node = new Node(data);
+    if (!this.tail) { // 链表为空
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      node.prev = this.tail;
+      this.tail = node;
+    }
+    this.size++;
+  }
+  unshift(data) { // 前端入队
+    const node = new Node(data);
+    if (!this.head) { // 链表为空
+      this.head = node;
+      this.tail = node;
+    } else {
+      node.next = this.head;
+      this.head.prev = node;
+      this.head = this.head.prev;
+    }
+    this.size++;
+  }
+  pop() { // 后端出队
+    if (!this.tail) return;
+    const val = this.tail.data;
+    if (this.head === this.tail) { // 链表只有一个节点
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+    }
+    this.size--;
+    return val;
+  }
+  shift() { // 前端出队
+    if (!this.head) return;
+    const val = this.head.data;
+    if (this.head === this.tail) { // 链表只有一个节点
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.head = this.head.next;
+      this.head.prev = null;
+    }
+    this.size--;
+    return val;
+  }
+}
+```
+
+### 应用场景
+
+- 浏览器任务队列
+- 广度优先搜索
 
 ## 递归
 
