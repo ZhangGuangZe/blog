@@ -75,6 +75,7 @@ module.exports = {
                     sidebarDepth: 2,
                     children: [
                         ['/front/javascript/history', '发展史'],
+                        ['/front/javascript/structure', '语言结构'],
                     ]
                 },
                 {
