@@ -1104,24 +1104,39 @@ insertionSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 
 ![Merge-sort](https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif)
 
-归并排序包括自顶向下和自底向上两种实现方式。他们在合并有序数组时，可以使用临时数组存储排序结果；也可以使用临时数组储存原数组元素，然后在原数组中存储排序结果。
+归并排序包括自上而下和自下而上两种实现。
+
+#### 自上而下归并排序
+
+自上而下归并排序的思路是递归的将未排序数组分为两个子数组，先排序左边子数组，然后排序右边子数组，最后将两个子数组合并为一个数组。
+
+归并排序的合并操作可以借助两个数组实现，也可以借助一个数组实现。
+
+借助两个辅助数组合并的思路是将未排序的数组一分为二存储到两个临时数组中，从左到右依次比较这两个数组的元素，根据元素的大小关系将元素放回原数组中。
 
 ``` js
 function merge(array, lo, mid, hi) {
-  let i = lo, j = mid + 1;
-  const temp = [...array];
+  const n1 = mid - lo + 1, n2 = hi - mid;
+  const arr1 = [], arr2 = [];
+  for (let i = 0; i < n1; i++) {
+    arr1[i] = array[lo + i];
+  }
+  for (let j = 0; j < n2; j++) {
+    arr2[j] = array[mid + j + 1];
+  }
+  arr1[n1] = Infinity;
+  arr2[n2] = Infinity;
+  let i = 0, j = 0;
   for (let k = lo; k <= hi; k++) {
-    if (i > mid) array[k] = temp[j++];
-    else if (j > hi) array[k] = temp[i++];
-    else if (temp[i] > temp[j]) array[k] = temp[j++];
-    else array[k] = temp[i++];
+    if (arr1[i] <= arr2[j]) {
+      array[k] = arr1[i];
+      i += 1;
+    } else {
+      array[k] = arr2[j];
+      j += 1;
+    }
   }
 }
-```
-
-自顶向下归并排序使用递归实现，其思路是先将左边部分排序，然后对右半部分排序，最终和并两部分的结果。
-
-``` js
 function topDownMergeSort(array) {
   const sort = (lo, hi) => {
     if (lo >= hi) return;
@@ -1136,14 +1151,48 @@ function topDownMergeSort(array) {
 topDownMergeSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-自底向上归并排序使用迭代实现，其思路是先两两归并，然后四四归并，然后八八归并，直到只有一个排序数组为止。
+借助一个额外数组合并的思路是将数组的所有元素批量复制到一个辅助数组中，然后将合并结果放回原数组中。
+
+``` js
+function merge(array, lo, mid, hi, temp) {
+  for (let k = lo; k <= hi; k++) {
+    temp[k] = array[k];
+  }
+  let i = lo, j = mid + 1;
+  for (let k = lo; k <= hi; k++) {
+    if (i > mid) array[k] = temp[j++];
+    else if (j > hi) array[k] = temp[i++];
+    else if (temp[i] > temp[j]) array[k] = temp[j++];
+    else array[k] = temp[i++];
+  }
+}
+function topDownMergeSort(array) {
+  const n = array.length;
+  const temp = new Array(n).fill(0);
+  const sort = (lo, hi) => {
+    if (lo >= hi) return;
+    const mid = lo + Math.floor((hi - lo) / 2);
+    sort(lo, mid);
+    sort(mid + 1, hi);
+    merge(array, lo, mid, hi, temp);
+  };
+  sort(0, n - 1);
+  return array;
+}
+topDownMergeSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+#### 自下而上归并排序
+
+自下而上归并排序的思路是通过迭代，先两两合并，然后四四合并，然后八八合并，直到只有一个排序数组为止。
 
 ``` js
 function bottomUpMergeSort(array) {
   const n = array.length;
+  const temp = new Array(n).fill(0);
   for (let i = 1; i < n; i *= 2) {
     for (let j = 0; j < n; j += i * 2) {
-      merge(array, j, j + i - 1, Math.min(j + 2 * i - 1, n - 1));
+      merge(array, j, j + i - 1, Math.min(j + 2 * i - 1, n - 1), temp);
     }
   }
   return array;
