@@ -1012,7 +1012,7 @@ function fibonacci(n) {
 
 **排序算法**（Sorting algorithm）是一种将一组数据按照特定顺序排列的算法。
 
-常见的排序算法包括：冒泡排序、插入排序、选择排序、快速排序、归并排序、桶排序、计数排序和基数排序等。
+常见的排序算法包括：冒泡排序、插入排序、选择排序、快速排序、归并排序、计数排序和桶排序等。
 
 在分析排序算法时，需要从以下几个方面考虑：
 
@@ -1024,7 +1024,7 @@ function fibonacci(n) {
 
 ### 冒泡排序
 
-**冒泡排序**（Bubble sort）是一种基于比较的简单排序算法，其思想是将相邻两个元素比较交换到未排序区间最右侧。
+**冒泡排序**（Bubble sort）是一种基于比较的简单排序算法。其思想是将相邻两个元素比较交换到未排序区间最右侧。
 
 ![Bubble Sort](https://upload.wikimedia.org/wikipedia/commons/c/c8/Bubble-sort-example-300px.gif)
 
@@ -1050,7 +1050,7 @@ bubbleSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 
 ### 选择排序
 
-**选择排序**（Selection sort）是一种基于比较的简单排序算法，其思想是将未排序区间的最小元素与未排序区间的第一个元素交换。
+**选择排序**（Selection sort）是一种基于比较的简单排序算法。其思想是将未排序区间的最小元素与未排序区间的第一个元素交换。
 
 ![Selection sort](https://upload.wikimedia.org/wikipedia/commons/9/94/Selection-Sort-Animation.gif)
 
@@ -1074,7 +1074,7 @@ selectionSort([8, 5, 2, 6, 9, 3, 1, 4, 0, 7]); // => [0, 1, 2, 3, 4, 5, 6, 7, 8,
 
 ### 插入排序
 
-**插入排序**（Insertion sort）是一种基于比较的简单排序算法，其思想是从未排序列表中取出第一个元素插入到已排序列表合适位置的简单排序算法。
+**插入排序**（Insertion sort）是一种基于比较的简单排序算法。其思想是从未排序列表中取出第一个元素插入到已排序列表合适位置。
 
 ![insertion-sort](https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif)
 
@@ -1096,15 +1096,15 @@ function insertionSort(array) {
 insertionSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-插入排序最好情况时间复杂度为 O(n)，平均和最坏情况时间复杂度为 O(n²)。插入排序在小规模数据中的性能要比冒泡排序好。插入排序是稳定原地排序算法，其空间复杂度为 O(1)。
+插入排序最好情况时间复杂度为 O(n)，平均和最坏情况时间复杂度为 O(n²)。插入排序是稳定原地排序算法，其空间复杂度为 O(1)。插入排序适合在小规模数据中使用。
 
 ### 归并排序
 
-**归并排序**（Merge sort）是一种基于比较的高效排序算法。归并排序利用分治算法，其思想是（递归的）将未排序数组分解成多个子数组，直到子数组中只有一个元素为止，最后将子数组合并为较大的数组，直到只剩下一个排序数组为止。
+**归并排序**（Merge sort）是一种基于比较的分治排序算法。其思想是（递归的）将未排序数组分解成多个子数组，直到子数组中只有一个元素为止，最后将子数组合并为较大的数组，直到只剩下一个排序数组为止。
 
 ![Merge-sort](https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif)
 
-归并排序包括自上而下和自下而上两种实现。
+归并排序包括自上而下和自下而上两种实现方式。
 
 #### 自上而下归并排序
 
@@ -1200,15 +1200,17 @@ function bottomUpMergeSort(array) {
 bottomUpMergeSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-归并排序的最好、平均和最坏情况时间复杂度为 O(nlogn)。归并排序是稳定非原地排序算法，因为在合并过程中需要借助额外存储空间，其空间复杂度为 O(n)。
+归并排序的最好、平均和最坏情况时间复杂度为 O(nlogn)。归并排序是稳定非原地排序算法，因为在合并过程中需要借助额外存储空间，其空间复杂度为 O(n)。归并排序适合在没有空间限制的大规模数据中且使用。
 
 ### 快速排序
 
-**快速排序**（Quick sort）是一种基于比较应用广泛的高效排序算法。快速排序利用了分治算法，其思想是从数组中**选择**一个主元元素（povit element），根据该元素与其他元素的大小关系将数组的其他元素**划分**为两个子数组；然后递归的对子数组进行排序，重复以上两步，直到子数组只包含一个元素为止，则该数组完全有序。
+**快速排序**（Quick sort）是一种基于比较且应用广泛的分治排序算法。其思想是从数组中**选择**一个主元元素（povit element），根据该元素与其他元素的大小关系将数组的其他元素**划分**为两个子数组；然后递归的对子数组进行排序，重复以上两步，直到子数组只包含一个元素为止，则该数组完全有序。
 
 ![Quick-sort](https://upload.wikimedia.org/wikipedia/commons/9/9c/Quicksort-example.gif)
 
-选择主元有很多方式，最简单的一种是选择数组最左边或最右边元素，另一种是随机选择一个元素或选择中间元素。划分有 Lomuto 和 Hoare 两种思路。
+选择主元有很多方式，最简单的一种是选择数组最左边或最右边元素，另一种是随机选择一个元素或选择中间元素。划分操作有 Lomuto 和 Hoare 两种思路。
+
+Lomuto 划分选择数组最右边元素作为主元，并围绕它来划分子数组。其中维护了 i 和 j 两个索引，通过遍历数组，将小于主元的元素放到 lo 到 i - 1 区间中，将等于或大于主元的元素放到 i 到 j 区间中。循环结束后，将主元交换到两个区间之间。
 
 ``` js
 function partition(array, lo, hi) {
@@ -1236,7 +1238,7 @@ function quickSort(array) {
 quickSort([2, 8, 7, 1, 3, 5, 6, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-Lomuto 划分选择数组最右边元素作为主元，并围绕它来划分子数组。其中维护了 i 和 j 两个索引，通过遍历数组，将小于主元的元素放到 lo 到 i - 1 区间中，将等于或大于主元的元素放到 i 到 j 区间中。循环结束后，将主元交换到两个区间之间。
+Hoare 划分选择数组中间元素作为主元来划分子数组。然后从左往右扫描直到找到第一个大于等于它的元素，再从右往左扫描直到找到第一个小于等于它的元素，最后交换这两个元素。如果两指针相遇，返回 j 即可。
 
 ``` js
 function partition(array, lo, hi) {
@@ -1264,144 +1266,109 @@ function quickSort(array) {
 quickSort([6, 5, 3, 1, 8, 7, 2, 4]); // => [1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-Hoare 划分选择数组中间元素作为主元来划分子数组。然后从左往右扫描直到找到第一个大于等于它的元素，再从右往左扫描直到找到第一个小于等于它的元素，最后交换这两个元素。如果两指针相遇，返回 j 即可。
-
 Lomuto 划分紧凑且易于理解，Hoare 划分性能较好，平均交换次数减少了三倍。
 
 对于简单的选择最左边或者最右边的元素作为主元，每层递归选择的主元划分的子数组可能会极度不平衡，最坏情况时间复杂度为 O(n²)。不过，可以使用随机抽样法或者三数取中法来选择一个划分平衡的主元，让期望运行时间达到 O(nlogn)。
 
 实际应用中经常会出现存在大量重复数据的数组，可以使用三向切分的思路，将数组切成小于、等于和大于主元元素三个部分来进一步优化快速排序。
 
-快速排序最好和平均情况时间复杂度为 O(nlogn)，最坏情况时间复杂度为 O(n²)。快速排序是一种原地不稳定的排序算法，空间复杂度为 O(logn)。
+快速排序最好和平均情况时间复杂度为 O(nlogn)，最坏情况时间复杂度为 O(n²)。快速排序是一种原地不稳定的排序算法，空间复杂度为 O(logn)。快速排序适合在大规模数据中使用。
 
-### 线性排序
+以上排序算法都是基于**比较**的排序算法，这也决定了他们最好情况时间复杂度为 O(nlogn)，以下是基于**计算**的几种线性排序算法。
 
-以上排序算法都是基于**比较**的排序算法，这也决定了他们最好情况时间复杂度为 O(nlogn)，以下是基于**运算**的几种线性排序算法。它们是最好情况时间复杂度都是 O(n)，同样适合大规模数据排序，但不适合内存紧缺的场景，因为它们需要额外的内存空间来存储数据。
+### 计数排序
 
-#### 计数排序
-
-计数排序是根据小于某一元素的个数来确定元素位置的排序算法。
-
-算法步骤：
-
-1. 将数组 A 中元素出现的个数存储在一个数组 C 中；
-2. 在 C 中原地算出小于某一元素的总和；
-3. 从数组 A 的最后一位元素开始依次取出元素，并使用该元素在数组 C 中查找该元素排序的位置；
-4. 根据数组 C 提供的位置，一次将数组 A 的元素添加到数组 B 中。
-
-算法实现：
+**计数排序**（Counting sort）是一种基于计算的整数排序算法。其思想是计算数组当前元素出现的次数，并根据该元素与其它元素大小关系的个数来确认当前元素的位置，然后从右往左对数组进行排序。
 
 ``` js
-function countingSort(A) {
-  let n = A.length;
-  if (n <= 1) return;
-
-  let max = A[0];
-  for (let i = 0; i < n; i++) {
-    if (max < A[i]) {
-        max = A[i];
+function countingSort(array) {
+  const n = array.length;
+  const findMaxValue = array => {
+    let max = array[0];
+    for (let i = 1; i < n; i++) {
+      if (max < array[i]) max = array[i];
     }
-  }
-
-  let C = new Array(max + 1).fill(0);
-
+    return max;
+  };
+  if (n <= 1) return array;
+  const k = findMaxValue(array);
+  const count = new Array(k + 1).fill(0);
   for (let i = 0; i < n; i++) {
-    C[A[i]]++;
+    count[array[i]] += 1;
   }
-
-  for (let i = 1; i <= max; i++) {
-    C[i] = C[i - 1] + C[i];
+  for (let i = 1; i <= k; i++) {
+    count[i] += count[i - 1];
   }
-
-  let B = [];
+  const temp = [...array];
   for (let i = n - 1; i >= 0; i--) {
-    let index = C[A[i]] - 1;
-    B[index] = A[i];
-    C[A[i]]--;
+    array[count[temp[i]] - 1] = temp[i];
+    count[temp[i]] -= 1;
   }
-  return B;
+  return array;
 }
 countingSort([2, 5, 3, 0, 2, 3, 0, 3]);
 ```
 
-计数排序的时间和空间复杂度都是 O(n + k)，如果 k = O(n)，则时间复杂度为 O(n)，它是一种稳定不原地的排序算法，是基数排序的基础。
+在计数排序算法的代码中，我们首先需要找到未排序数组中的最大值；其次根据它来创建一个大小为 k + 1 的数组 count，并对元素出现次数进行计数；然后在 count 中计算小于等于当前元素的个数；最后为了保证算法的稳定性，从右到左根据当前元素的位置排序并从 count 中将当前元素出现的次数减一；最终返回已排序数组。
 
-#### 基数排序
+计数排序的时间和空间复杂度都是 O(k + n)，如果 k = O(n)，时间复杂度为 O(n)，它是一种稳定非原地的排序算法，是基数排序的基础。
 
-基数排序是根据数组元素位数排序的排序算法，需要从低位到高位排序才能保证基数排序的稳定性。
+计数排序算法仅适用于整数数据，如果数据中包含负整数，需要先将数据转换为正整数，再进行排序。
 
-算法实现：
+### 桶排序
+
+**桶排序**（Bucket sort）是一种基于计算的排序算法。其思想是首先将元素均匀、独立地分布在 n 个相同大小的区间内（桶），然后对桶内的元素排序，最后依次遍历每个桶的元素即可完成排序。
 
 ``` js
-function radixSort(arr) {
-  const max = Math.max(...arr);
-  let digit = `${max}`.length;
-  let start = 1;
-  let buckets = [];
-  while(digit > 0) {
-    start *= 10;
-    for (let i = 0; i < arr.length; i++) {
-      const index = arr[i] % start;
-      !buckets[index] && (buckets[index] = []);
-      buckets[index].push(arr[i]);
+function bucketSort(array, size = 2) {
+  const n = array.length;
+  let minValue = array[0];
+  let maxValue = array[0];
+  for (let i = 1; i < n; i++) {
+    if (array[i] < minValue) {
+      minValue = array[i];
     }
-    arr = [];
-    for (let i = 0; i < buckets.length; i++) {
-      buckets[i] && (arr = arr.concat(buckets[i]));
+    if (array[i] > maxValue) {
+      maxValue = array[i];
     }
-    buckets = [];
-    digit--;
   }
-  return arr;
-}
-radixSort([1, 10, 100, 1000, 98, 67, 3, 28, 67, 888, 777])
-```
-
-基数排序的算法时间复杂度为 O(d(n+k))，d 是元素最大位数，n 是元素个数，k 是在某位数上可能的值，如果 d 为常数且 k = O(n)，则基数排序的时间复杂度是线性的。基数排序是一种稳定不原地的排序算法。
-
-#### 桶排序
-
-首先是将元素均匀、独立地分布在 n 个相同大小的区间内（桶），然后对桶内的元素排序，最后依次遍历每个桶的元素即可完成排序。
-
-算法实现：
-
-``` js
-function bucketSort(arr, count = 5) {
-  if (arr.length <= 1) return arr;
-
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
+  const count = Math.floor((maxValue - minValue) / size) + 1;
   const buckets = [];
-  const size = Math.floor((max - min) / count) + 1;
-  
-  for (let i = 0; i < arr.length; i++) {
-    const index = ~~(arr[i] / size); // Math.floor((arr[i] - min) / size)
-    if (!buckets[index]) {
-      buckets[index] = [];
-      buckets[index].push(arr[i]);
-    } else {
-      let len = buckets[index].length - 1;
-      while (len >= 0 && buckets[index][len] > arr[i]) {
-        buckets[index][len + 1] = buckets[index][len];
-        len--;
-      }
-      buckets[index][len + 1] = arr[i];
-    }
+  for (let i = 0; i < count; i++) {
+    buckets[i] = [];
   }
-
-  let wrapBuckets = [];
+  for (let i = 0; i < n; i++) {
+    const j = Math.floor((array[i] - minValue) / size);
+    buckets[j].push(array[i]);
+  }
+  const sortedArray = [];
   for (let i = 0; i < buckets.length; i++) {
-    if (buckets[i]) wrapBuckets = wrapBuckets.concat(buckets[i]);
+    if (!buckets[i]) continue;
+    insertionSort(buckets[i]);
+    sortedArray.push(...buckets[i]);
   }
-  return wrapBuckets;
+  return sortedArray;
 }
 bucketSort([11, 9, 6, 8, 1, 3, 5, 1, 1, 0, 100], 10);
 ```
 
-当数组内的元素均匀分布在桶内时，则它的时间复杂度为 O(n)。桶排序也是一种稳定不原地的排序算法。
+在桶排序算法代码中，需要建立 n 个大小相同的桶，然后依次将元素放入到不同范围的桶中，桶可以使用动态数组或者链表数据结构来实现，最后对每个桶进行排序，排序可以选择插入排序或者快速排序。
 
+桶排序算法的平均情况时间复杂度为 O(n)，最坏情况时间复杂度为 O(n²)，空间复杂度为 O(k + n)。桶排序是一种非原地排序算法，稳定性取决于桶内部使用的排序算法。
 
-一个成熟的工业级排序函数底层会使用几种排序算法和编程技巧来实现，那么，JavaScript 中的 `sort()` 函数的底层是怎样实现的呢？
+以下是各排序的复杂度分析：
+
+| 名称        | 分类       | 最好情况  | 平均/期望情况 | 最坏情况    | 内存         | 稳定性    | 
+| ----------- | --------- | --------- | ------------ | ---------- | ----------- | --------- |
+| 冒泡排序    | 基于比较    | O(n)     | O(n²)        | O(n²)      | O(1)         | 稳定      |       
+| 选择排序    | 基于比较    | O(n²)    | O(n²)        | O(n²)      | O(1)         | 不稳定    |
+| 插入排序    | 基于比较    | O(n)     | O(n²)        | O(n²)      | O(1)         | 稳定      |
+| 归并排序    | 基于比较    | O(nlogn) | O(nlogn)     | O(nlogn)   | O(n)         | 稳定      |
+| 快速排序    | 基于比较    | O(nlogn) | O(nlogn)     | O(n²)      | O(logn) 原地 | 不稳定    |
+| 计数排序    | 基于计算    | ——       | O(k + n)     | O(k + n)   | O(k + n)     | 稳定      |
+| 桶排序      | 基于计算    | ——       | O(n)         | O(n²)      | O(k + n)     | 稳定      |
+
+关于更多算法的可视化，可以点击[这里](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)查看。
 
 ## 二分查找
 
