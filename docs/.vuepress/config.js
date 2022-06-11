@@ -30,18 +30,18 @@ module.exports = {
                 text: '前端知识体系',
                 link: '/front/'
             },
-            {
-                text: '前端工程化',
-                link: '/engineering/'
-            },
-            {
-                text: '实战项目',
-                link: '/exercise/'
-            },
-            {
-                text: '学习总结',
-                link: '/summarize/front'
-            },
+            // {
+            //     text: '前端工程化',
+            //     link: '/engineering/'
+            // },
+            // {
+            //     text: '实战项目',
+            //     link: '/exercise/'
+            // },
+            // {
+            //     text: '学习总结',
+            //     link: '/summarize/front'
+            // },
             {
                 text: 'GitHub',
                 link: 'https://github.com/HotZhang'
@@ -76,6 +76,7 @@ module.exports = {
                     children: [
                         ['/front/javascript/history', '发展史'],
                         ['/front/javascript/structure', '语言结构'],
+                        ['/front/javascript/type', '类型系统'],
                     ]
                 },
                 {
@@ -96,12 +97,12 @@ module.exports = {
                 children: [
                     ['/computer/', '简介'],
                     ['/computer/algorithm', '数据结构与算法'],
-                    ['/computer/protocol', '网络协议'],
-                    ['/computer/patterns', '设计模式'],
-                    ['/computer/network', '计算机网络'],
-                    ['/computer/compile', '编译原理'],
-                    ['/computer/composition', '计算机组成原理'],
-                    ['/computer/os', '操作系统']
+                    // ['/computer/protocol', '网络协议'],
+                    // ['/computer/patterns', '设计模式'],
+                    // ['/computer/network', '计算机网络'],
+                    // ['/computer/compile', '编译原理'],
+                    // ['/computer/composition', '计算机组成原理'],
+                    // ['/computer/os', '操作系统']
                 ]
             }],
             '/summarize/': [{
