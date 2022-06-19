@@ -52,14 +52,6 @@ module.exports = {
         sidebar: {
             '/front/': [
                 {
-                    title: '前端知识体系',
-                    collapsable: false,
-                    sidebarDepth: 2,
-                    children: [
-                        ['/front/', '简介']
-                    ]
-                },
-                {
                     title: 'HTML',
                     collapsable: false,
                     sidebarDepth: 2
@@ -90,21 +82,29 @@ module.exports = {
                     sidebarDepth: 2
                 }
             ],
-            '/computer/': [{
-                title: '计算机基础',
-                collapsable: false,
-                sidebarDepth: 2,
-                children: [
-                    ['/computer/', '简介'],
-                    ['/computer/algorithm', '数据结构与算法'],
-                    // ['/computer/protocol', '网络协议'],
-                    // ['/computer/patterns', '设计模式'],
-                    // ['/computer/network', '计算机网络'],
-                    // ['/computer/compile', '编译原理'],
-                    // ['/computer/composition', '计算机组成原理'],
-                    // ['/computer/os', '操作系统']
-                ]
-            }],
+            '/computer/': [
+                {
+                    title: '数据结构与算法',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ['/computer/algorithms/', '简介'],
+                        ['/computer/algorithms/analysis', '算法分析'],
+                        ['/computer/algorithms/array', '数组'],
+                        ['/computer/algorithms/linked-list', '链表'],
+                        ['/computer/algorithms/stack', '栈'],
+                        ['/computer/algorithms/queue', '队列'],
+                        ['/computer/algorithms/divide-and-conquer', '递归 & 分治'],
+                        ['/computer/algorithms/sorting', '排序算法'],
+                        ['/computer/algorithms/binary-search', '二分查找'],
+                        ['/computer/algorithms/hash-table', '散列表'],
+                        ['/computer/algorithms/tree', '树'],
+                        ['/computer/algorithms/heap', '堆'],
+                        ['/computer/algorithms/graph', '图'],
+                        ['/computer/algorithms/strings', '字符串匹配算法']
+                    ]
+                }
+            ],
             '/summarize/': [{
                 title: '学习总结',
                 collapsable: false,
@@ -126,6 +126,5 @@ module.exports = {
 
         // 启动页面滚动效果
         smoothScroll: true,
-
     }
 }
