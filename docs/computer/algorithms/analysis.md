@@ -1,6 +1,6 @@
 # 算法分析
 
-在计算机科学中，算法分析（Analysis of algorithm）是分析解决计算问题所需任何算法执行所需计算资源（计算时间、内存空间等）或者复杂度的过程。算法分析一词由著名的计算机科学家高德纳创造，是计算复杂度理论重要的组成部分。
+在计算机科学中，**算法分析**（Analysis of algorithm）是分析解决计算问题所需任何算法执行所需计算资源（计算时间、内存空间等）或者复杂度的过程。算法分析一词由著名的计算机科学家高德纳创造，是计算复杂度理论重要的组成部分。
 
 著名的**摩尔定律**定律告诉我们，计算机的计算速度和内存容量每 18 个月都会翻一倍。但是，这些计算机资源并不是无限的，我们通过算法分析寻找一种高效的算法在有限资源情况下可以提升程序的性能。
 
@@ -17,3 +17,10 @@
 ![Comparison computational complexity](https://upload.wikimedia.org/wikipedia/commons/7/7e/Comparison_computational_complexity.svg)
 
 注：具体的算法分析过程将会在各算法中详细说明。
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Analysis_of_algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》

@@ -211,3 +211,12 @@ class DoublyEndedQueue {
 
 - 浏览器任务队列
 - 广度优先搜索
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Queue_(abstract_data_type))
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

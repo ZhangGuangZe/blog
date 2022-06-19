@@ -125,3 +125,12 @@ binarySearch([1, 3, 5, 7, 9], 10); // => -1
 ```
 
 二分查找并不是所有应用场景都适用。如果输入规模很小，使用线性搜索就足够了；如果数据删除、插入操作频繁，使用二分查找将是一个低效的解决方案，因为每次删除或者插入元素后都需要进行排序来保证数组的有序性，可以使用散列表、二叉搜索树等动态数据结构代替。
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Binary_search_algorithm)
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

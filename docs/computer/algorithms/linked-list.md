@@ -383,3 +383,12 @@ LRU（Least Recently Used，最近最少使用）缓存淘汰算法。
 - 如果该数据存在于缓存中，则将数据从原始位置挪动到缓存头部。
 
 可以使用双向链表或者哈希表实现该算法。
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Linked_list)
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

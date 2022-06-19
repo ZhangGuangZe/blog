@@ -359,3 +359,12 @@ bucketSort([11, 9, 6, 8, 1, 3, 5, 1, 1, 0, 100], 10);
 | 桶排序      | 基于计算    | ——       | O(n)         | O(n²)      | O(k + n)     | 稳定      |
 
 关于更多算法的可视化，可以点击[这里](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)查看。
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Sorting_algorithm)
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

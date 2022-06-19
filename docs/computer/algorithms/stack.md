@@ -152,3 +152,12 @@ isEmpty() {
 - 递归
 - 回溯
 - 深度优先搜索
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

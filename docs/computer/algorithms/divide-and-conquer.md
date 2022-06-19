@@ -66,3 +66,11 @@ function fibonacci(n) {
 ## 分治算法
 
 **分治算法**（Divide and conquer，也称分而治之）是一种算法设计方法。其核心思想是（递归的）将原问题**分解**为多个规模更小且类似于原问题的子问题，直到子问题简单到可以直接**解决**为止，然后将子问题的解**合并**成原问题的解。分治算法是归并排序和快速排序等高级算法的基础。
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Recursion_(computer_science))
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）

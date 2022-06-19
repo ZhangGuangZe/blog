@@ -151,3 +151,8 @@ function merge(arr1, arr2) {
 const arr1 = [1,3,5], arr2 = [0,2,4,6];
 merge(arr1, arr2); // => [0,1,2,3,4,5,6]
 ```
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Array_data_structure)
+- 《数据结构与算法之美》
