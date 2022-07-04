@@ -22,9 +22,7 @@
 
 在 JavaScript 语言中，数组数据类型的底层实现原理并未遵循数组数据结构的定义，而是根据存储数据的不同，选择不同的实现方式。如果数组储存的是相同类型的数据，会分配一块连续的内存空间来存储数据；如果是不同类型的数据，并不会连续存储在内存中，而是使用类似哈希表的结构存储不同类型的数据。
 
-以下是关于数组的必知必会代码实现。
-
-1. 实现一个支持动态扩容的数组
+## 动态扩容数组
 
 ``` js
 class DynamicArray {
@@ -39,10 +37,9 @@ class DynamicArray {
       this.size *= 2;
       this.arr = new Array(this.size).fill(0);
       for (let i = 0; i < temp.length; i++) {
-          this.arr[i] = temp[i];
+        this.arr[i] = temp[i];
       }
     } 
-    
     this.arr[this.length++] = v;
   }
 }
@@ -53,7 +50,7 @@ for (let i = 1; i <= 12; i++) {
 }
 ```
 
-2. 实现一个大小固定的有序数组，支持动态增删改操作
+## 固定有序数组
 
 ``` js
 class FixedOrderedArray {
@@ -120,7 +117,7 @@ orderedArray.remove(5);    // => [2, 4, 0, 0, 0]
 orderedArray.modify(0, 6); // => [4, 6, 0, 0, 0]
 ```
 
-3. 实现两个有序数组合并为一个有序数组
+## 合并两个有序数组
 
 ``` js
 function merge(arr1, arr2) {
