@@ -277,6 +277,40 @@ queryString.replaceAll('+', ' '); // => 'q=query string parameters'
 
 ### Symbol 类型
 
+Symbol 类型是 ES6 新增的数据类型，用于为对象的属性名创建一个唯一的、非字符串形式的标识符，这样能够避免对象属性名冲突。Symbol 类型还可以用于定义语言内部行为。
+
+我们可以使用 `Symbol()` 函数创建 Symbol 类型的值。为了方便阅读与调试，可以为函数传入一个可选的字符串参数作为 symbol 值的描述。
+
+#### 属性
+
+为了方便读取描述，ES2019 增加了 `description` 属性。
+
+``` js
+const mySymbol = Symbol('foo');
+mySymbol.description // => 'foo'
+```
+
+#### 方法
+
+- for(key)
+
+有时候，我们需要在不同执行上下文共享和复用 symbol 值，那么可以通过 `Symbol.for(key)` 方法并传入字符串参数 key 在全局注册表中创建或者查找 symbol。
+
+``` js
+const createGlobalSymbol = Symbol.for('foo');
+const reuseGlobalSymbol = Symbol.for('foo');
+createGlobalSymbol === reuseGlobalSymbol; // => true
+```
+
+- keyFor(symbol)
+
+`Symbol.keyFor(symbol)` 方法用于返回在全局注册表中与 symbol 关联的 key。如果查找的 symbol 值不在全局符号表中，则返回 `undefined`。
+
+``` js
+const globalSymbol = Symbol.for('foo');
+Symbol.keyFor(globalSymbol); // => 'foo'
+```
+
 ### Number 类型
 
 ### BigInt 类型
