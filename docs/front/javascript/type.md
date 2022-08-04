@@ -313,6 +313,88 @@ Symbol.keyFor(globalSymbol); // => 'foo'
 
 ### Number 类型
 
+Number 类型是一种基于 IEEE 754 标准的 64 位[双精度浮点数](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)**数值类型**。
+
+![双精度浮点数](https://upload.wikimedia.org/wikipedia/commons/a/a9/IEEE_754_Double_Floating_Point_Format.svg)
+
+双精度浮点数格式由 1 位符号位（sign）、11 位指数位（exponent）和 53 位有效位（fraction）构成。符号位在最高位中，0 表示正数，1 表示负数；指数位用于表示小数点的位置，也可以用于表示 NaN、Infinity 和非规范化浮点数；有效位用于表示一定范围内的小数，并且有效位的最高位存在一个彩蛋位，该位始终为 1。
+
+> 数值 = 符号位 * 有效位 * 2 ** 指数
+
+Number 类型可以用来表示整数和浮点数值。在表示整数时，它的精度高达 53 位；但在表示浮点数时，浮点数在精度与性能之间做了权衡，有一些实数在 64 位存储空间中无法表示，为了保证性能，只能四舍五入到最接近的实数表示，这样那些无法表示的实数就会存在精度丢失，这也导致 0.1 + 0.2 !== 0.3。
+
+#### 特殊数值
+
+##### 零
+
+JavaScript 基于 IEEE 754 标准实现了 `0` 和 `-0` 两个零。除了用零做除数以外，它们几乎没有任何区别，但是不建议这么做。
+
+``` js
+0 === -0 // => true
+1 / 0  // => Infinity
+-1 / 0 // => -Infinity
+```
+
+##### Infinity
+
+`Infinity` 指的是大到无法表示的值，并不是数学上的 ∞ 。
+
+##### NaN
+
+`NaN`（Not a Number）表示不是数值的数值。在算数运算中产生没有意义的结果或者转换数值失败时会返回 `NaN`。
+
+``` js
+0 / 0     // 没有意义，返回 NaN
+0 / NaN   // 没有意义，返回 NaN
+0 / 'foo' // 转换失败，返回 NaN
+```
+
+需要注意的是，`NaN` 不等于它自己。
+
+``` js
+NaN === NaN // => false
+```
+
+#### 属性
+
+- `Number.EPSILON`<sup>ES6</sup> 表示最小正数，即 `2 ** -52`。由于浮点数运算存在精度丢失，会与实际结果产生误差。不过，我们可以通过 `Number.EPSILON` 为浮点数运算设置一个安全误差范围，如果运算结果在该范围内，则误差可以忽略不计。
+
+``` js
+Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON // => true
+```
+
+- `Number.MAX_SAFE_INTEGER`<sup>ES6</sup> 表示最大安全整数，即 `2 ** 53 - 1`、
+
+- `Number.MIN_SAFE_INTEGER`<sup>ES6</sup> 表示最小安全整数，即 `-(2 ** 53 - 1)`。
+
+- `Number.MAX_VALUE` 表示最大数值，相当于 `1.79E+308`；
+
+- `Number.MIN_VALUE` 表示最接近于 0 的最小值，相当于 `5e-324`。
+
+- `Number.POSITIVE_INFINITY` 表示太大而无法表示的正数，即 `Infinity`。
+
+- `Number.NEGATIVE_INFINITY` 表示太大而无法表示的负数，即 `-Infinity`。
+
+- `Number.NaN` 与 `NaN` 相同。
+
+#### 方法
+
+- Number.isSafeInteger(number)<sup>ES6</sup> 检查数值类型 number 是否是安全整数。
+
+- Number.isInteger(number)<sup>ES6</sup> 检查数值类型 number 是否是整数。
+
+- Number.isFinite(number)<sup>ES6</sup> 检查数值类型 number 是否是有穷数。
+
+- Number.isNaN(number)<sup>ES6</sup> 检查数值类型 number 是否是 `NaN`。
+
+如果 number 是其他类型，以上方法都不会对 number 进行类型转换。
+
+- Number.parseInt(string, ?radix)<sup>ES6</sup> 用于将字符串转换为指定进制的整数。
+
+- Number.parseFloat(string)<sup>ES6</sup> 用于将字符串解析为浮点数。
+
+以上方法与全局方法 `parseInt()` 和 `parseFloat()` 的行为保持一致，只是出于减少全局命名空间污染目的，将其归纳到了 `Number` 函数中。
+
 ### BigInt 类型
 
 ### Object 类型
