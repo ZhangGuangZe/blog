@@ -2,9 +2,25 @@
 
 ECMAScript 中的类型用于操作值，每个值都有对应的类型。ECMAScript 类型被进一步细分为语言类型和规范类型。
 
+## 动态类型
+
+JavaScript 是一种动态类型或者弱类型的语言。变量本身没有与类型进行绑定，而值会在程序运行过程中自动确定类型。
+
 ## 语言类型
 
-ECMAScript 语言类型对应的是程序直接表示和操作的值。包括 `Undefined`、`Null`、`Boolean`、`String`、`Symbol`(ES6)、`Number`、`BigInt`(ES2020) 和 `Object` 八大类型。其中，前七种统称为基本类型，后面一种称为对象类型或引用类型。
+语言类型对应的是程序直接表示和操作的值。包括 `Undefined`、`Null`、`Boolean`、`String`、`Symbol`、`Number`、`BigInt` 和 `Object` 八大类型。
+
+其中，前七种类型统称为原始类型，其值为原始值，Object 类型称为对象类型，其值为对象。原始值和对象的区别在于：
+
+- 原始值
+  - 存储在栈内存中；
+  - 按值传递。将原始值赋值给变量或者作为参数传递给函数时，通过复制值的方式赋值或传递；
+  - 不可变（immutable）。一旦创建就无法修改值本身。
+
+- 对象
+  - 存储在堆内存中；
+  - 按引用传递。将对象赋值给变量或者作为参数传递给函数时，通过复制引用的方式赋值或传递；引用指向存储在堆内存中的对象；
+  - 可变（mutable）。默认情况下可以操作对象的属性。
 
 ### Undefined 和 Null 类型
 
@@ -509,5 +525,42 @@ const y = BigInt(9007199254740991);
 由于 Number 和 BigInt 之间强制类型转换会导致精度丢失，建议仅在预期大于 2 ** 53 的整数时才使用 BigInt。
 
 ### Object 类型
+
+Object 类型用于表示复杂的数据，其值为对象，对象是一组属性的集合。
+
+### 类型检测
+
+#### typeof
+
+我们可以通过 typeof 操作符来检测值的类型，它返回的是表示值类型的字符串。
+
+| 类型      | 返回结果    |
+| :-------- | ----------- |
+| Undefined | 'undefined' |
+| Null      | 'object'    |
+| Boolean   | 'boolean'   |
+| String    | 'string'    |
+| Symbol    | 'symbol'    |
+| Number    | 'number'    |
+| BigInt    | 'bigInt'    |
+| Function  | 'function'  |
+| Object    | 'object'    |
+
+值得注意的是，在某些情况的返回结果可能会让我们产生困惑。例如，
+
+1. 为什么 `typeof null` 返回 `'object'` 而不是 `'null'`？
+
+从结果来看，这是一个 bug；从最初设计角度来看，为了与 Java 保持一致，null 表示为“没有对象”的对象，所以 null 被建模成对象的一个特殊值；从最初的实现角度看，这是 “抽象泄露” 的结果，JavaScript 中的值由一个类型标记和实际值构成，null 值与对象值使用了相同的类型标记。所以返回 `'object'`。
+
+我们可以通过特殊处理来检测 null 的类型：
+
+``` js
+let a = null;
+!a && typeof a === 'object'; // => true
+```
+
+2. 为什么 `typeof function() {}` 返回 `'function'` ？
+
+这是因为作为一等公民的函数有其特殊性，有必要将函数与对象区分开。
 
 ## 规范类型
