@@ -10,7 +10,7 @@ JavaScript 是一种动态类型或者弱类型的语言。变量本身没有与
 
 语言类型对应的是程序直接表示和操作的值。包括 `Undefined`、`Null`、`Boolean`、`String`、`Symbol`、`Number`、`BigInt` 和 `Object` 八大类型。
 
-其中，前七种类型统称为原始类型，其值为原始值，Object 类型称为对象类型，其值为对象。原始值和对象的区别在于：
+其中，前七种类型统称为原始类型，其值为原始值，Object 类型称为对象类型，也称引用类型，其值为对象或引用。原始值和对象的区别在于：
 
 - 原始值
   - 存储在栈内存中；
@@ -484,7 +484,7 @@ Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON // => true
 
 如果 number 是其他类型，以上方法都不会对 number 进行类型转换。
 
-- Number.parseInt(string, ?radix)<sup>ES6</sup> 用于将字符串转换为指定进制的整数。
+- Number.parseInt(string, ?radix)<sup>ES6</sup> 用于将字符串解析为指定进制整数，这里的 radix 默认值并不是十进制，如果字符串开头包含 '0x' 或 '0X'，那么字符串会被当成十六进制解析。所以无论如何，我们都应该提供明确的 radix。
 
 - Number.parseFloat(string)<sup>ES6</sup> 用于将字符串解析为浮点数。
 
@@ -526,7 +526,7 @@ const y = BigInt(9007199254740991);
 
 ### Object 类型
 
-Object 类型用于表示复杂的数据，其值为对象，对象是一组属性的集合。
+Object 类型用于表示复杂的数据，这里的 Object 指的是广义上的对象，主要包括 `Object`、`Array`、`Function`、`RegExp` 和 `Date` 等对象，而不是狭义上的 `Object` 对象。
 
 ### 类型检测
 
@@ -562,5 +562,164 @@ let a = null;
 2. 为什么 `typeof function() {}` 返回 `'function'` ？
 
 这是因为作为一等公民的函数有其特殊性，有必要将函数与对象区分开。
+
+### 类型转换
+
+我们将值从一种类型转换到另一种类型称为类型转换。JavaScript 中的类型转换包括显示强制类型转换和隐式强制类型转换两种。
+
+使用转换函数和一些语义明显的操作符可以对值进行显示强制类型转换。而在一些操作符和语句中，JavaScript 通过一些转换规则，自动的将操作数和表达式的值隐式转换为特定类型。
+
+隐式强制类型转换最初的目的是为了降低 JavaScript 作为简单脚本语言的入门门槛，但由于各种原因产生了错综复杂的转换规则，导致其成为混淆和错误的重要来源。不过取其精华去其糟粕，我们还是可以体验到强制类型转换带来的便利。
+
+#### ToString
+
+ToString 是其它类型的值转换为字符串的抽象规则：
+
+| 类型      | 结果                                         |
+| :-------- | -------------------------------------------- |
+| Undefined | 'undefined'                                  |
+| Null      | 'null'                                       |
+| Boolean   | true => 'true'；false => 'false'             |
+| Number    | 调用 Number.toString() 方法                  |
+| BigInt    | 调用 BigInt.toString() 方法，后缀 n 会被去除 |
+| Symbol    | 抛出 **TypeError** 异常                      |
+| Object    | 执行 ToPrimitive 操作（见后文）               |
+
+`String()` 函数用于将非字符串显示强制类型转换为字符串。
+
+二元 + 操作符在某些情况下会对操作数进行隐式强制类型转换。如果有一个操作数是字符串，则会把另一个操作数转换为字符串。通常使用 x + '' 将 x 转换为字符串。
+
+以下是使用 `String()` 函数进行显示强制类型转换与使用二元 + 操作符进行隐式强制类型转换为字符串的区别：
+
+如果操作数是一个 Symbol 值，`String()` 函数可以将其转换为字符串，而使用二元 + 操作符转换则会抛出 TypeError 异常。
+
+如果操作数是一个对象，`String()` 函数通过 ToString 规则直接返回转换结果，而使用二元 + 操作符会先调用 `valueOf()` 方法，然后通过 ToString 规则将其结果转换为字符串。
+
+#### ToNumber
+
+ToNumber 是其它类型的值转换为数值的抽象规则：
+
+| 类型      | 结果                    |
+| :-------- | ----------------------- |
+| Undefined | NaN                     |
+| Null      | 0                       |
+| Boolean   | true => 1；false => 0   |
+| BigInt    | 抛出 **TypeError** 异常 |
+| String    | StringToNumber          |
+| Symbol    | 抛出 **TypeError** 异常 |
+| Object    | 执行 ToPrimitive 操作（见后文） |
+
+StringToNumber 转换规则如下：
+
+- 如果是空字符串，返回 0；
+
+- 如果字符串中是一个合法的 Number 类型的值，返回十进制数值，否则返回 NaN。
+
+`Number()` 函数用于非数值显示强制类型转换为数值。
+
+一元 + 操作符也用于将操作数显示强制类型转换为数值。
+
+#### ToBigInt
+
+ToBigInt 是其它类型的值转换为大整数的抽象规则：
+
+| 类型      | 结果                                                      |
+| :-------- | --------------------------------------------------------- |
+| Undefined | 抛出 **TypeError** 异常                                   |
+| Null      | 抛出 **TypeError** 异常                                   |
+| Boolean   | true => 1n；false => 0n                                   |
+| Number    | integer => integer + 后缀 n；非 integer，抛出 **RangeError** 异常；非法数值抛出 **SyntaxError** 异常 |
+| String    | StringToBigInt                                            |
+| Symbol    | 抛出 **TypeError** 异常                                   |
+
+StringToBigInt 转换规则如下：
+
+- 如果是空字符串，返回 0n；
+
+- 如果字符串中是一个合法的整数值，则返回带有后缀 n 的整数值，否则抛出 **SyntaxError** 异常
+
+`BigInt()` 函数用于将布尔值、字符串和数值转换大整数。
+
+#### ToBoolean
+
+ToBoolean 是将其他类型的值转换为布尔值的抽象规则：
+
+| 类型      | 结果                          |
+| --------- | ----------------------------- |
+| Undefined | false                         |
+| Null      | false                         |
+| String    | 空字符串 => false，其它 => true     |
+| Symbol    | true                          |
+| Number    | 0、NaN => false，其它 => true |
+| BigInt    | 0n => false，其它 => true     |
+| Object    | true                          |
+
+JavaScript 在一些需要布尔值的地方可以接受任何值作为操作数，而这些值会被隐式转换为布尔值。
+
+转换为 `false` 的值称为**假值**（falsy），包括：
+
+- `false`；
+
+- `undefined`；
+
+- `null`；
+
+- 空字符串；
+
+- `0`、`-0`、`0n` 和 `NaN`。
+
+转换为 `true` 的值称为**真值**（truthy）。需要注意的是，`{}`、`[]`、`'false'` 和 `'0'` 等值看起来像假值，其实都是真值。
+
+`Boolean()` 函数用于将非布尔值显示强制类型转换为布尔值。
+
+两个 !! 操作符也用于将操作数强制类型转换为布尔值。
+
+需要注意的是，下面的操作符、表达式和语句会将其它类型的值隐式强制类型转换为布尔值：
+
+- 逻辑操作符 `!` 、`||` 和 `&&` 的操作数；
+
+- 三元表达式（`? :`）的第一个操作数；
+
+- `if` 语句中的条件判断表达式；
+
+-  `while`、`do-while` 和 `for` 语句中的条件判断表达式。
+
+#### ToObject
+
+ToObject 表示原始值转换成对象，即装箱转换。我们通过构造函数来创建封装了布尔值、数值和字符串的包装对象。但是一般情况下，我们不需要直接使用这些对象，因为封装对象的行为令人困惑。
+
+我们在对原始值进行操作时，JavaScript 会隐式创建一个相应的包装对象，从而使用封装对象的属性和方法。使用完成之后会被立即销毁，所以给原始值创建属性并赋值后会立即不能访问。
+
+因为原始值 `undefined` 和 `null` 没有对应的包装对象，所以操作这两个原始值是会抛出 TypeError 异常。
+
+从 ES6 开始，新增的原始类型 `Symbol` 和 `BigInt` 不再支持显示的创建包装对象，如果想把这些类型转换成对象，可以使用 `Object()` 函数进行包装。
+
+#### ToPrimitive
+
+ToPrimitive 表示对象转换为原始值，即拆箱转换。其规则如下：
+
+- 如果该值有 `valueOf()` 方法，并且返回原始值，则使用该值进行强制类型转换；
+
+- 如果没有 `valueOf()` 方法，或者存在但返回的不是原始值，则使用 `toString()` 方法的返回值进行强制类型转换；
+
+- 如果没有 `toString()` 方法则抛出 TypeError 异常。
+
+虽然绝大多数对象转换为原始值都遵循 ToPrimitive 规则，但是 Date 对象比较独特，则是首先尝试调用 `toString()` 方法，再尝试 `valueOf()` 方法。
+
+#### 抽象相等比较算法
+
+只有在 `==` 操作符两边的操作数类型不同时，才会使用该算法，其规则简单概括如下：
+
+- 如果一个操作数是 `null`，另一个操作数是 `undefined`，则相等。除此之外，它们与其它值不相等；
+
+- 如果任意一个操作数是布尔值，则将其转换为数值再比较；
+
+- 如果一个操作数是字符串，另一个操作数是数值，则先调用 ToNumber 把字符串转换为数值再比较；
+
+- 如果一个操作数是字符串，另一个操作数是 BigInt，则先调用 StringToBigInt 把字符串转换为大整数再比较；
+
+- 如果一个操作数是 Object，另一个操作数是字符串、数值或大整数，则先调用 ToPrimitive 把对象转换为原始值再比较。
+
+详细规则请前往[官方标准](https://262.ecma-international.org/13.0/#sec-islooselyequal)查看。
 
 ## 规范类型
