@@ -8,7 +8,7 @@ JavaScript 是一种动态类型或者弱类型的语言。变量本身没有与
 
 ## 语言类型
 
-语言类型对应的是程序直接表示和操作的值。包括 `Undefined`、`Null`、`Boolean`、`String`、`Symbol`、`Number`、`BigInt` 和 `Object` 八大类型。
+ECMAScript 语言类型对应的是程序直接表示和操作的值。包括 `Undefined`、`Null`、`Boolean`、`String`、`Symbol`、`Number`、`BigInt` 和 `Object` 八大类型。
 
 其中，前七种类型统称为原始类型，其值为原始值，Object 类型称为对象类型，也称引用类型，其值为对象或引用。原始值和对象的区别在于：
 
@@ -490,6 +490,22 @@ Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON // => true
 
 以上方法与全局方法 `parseInt()` 和 `parseFloat()` 的行为保持一致，只是出于减少全局命名空间污染目的，将其归纳到了 `Number` 函数中。
 
+- toFixed(?fractionDigits)
+
+返回指定小数点位数表示的数值字符串。通过可选的 fractionDigits 指定保留多少位小数。
+
+- toExponential(?fractionDigits)
+
+返回以科学计数表示法表示的数值字符串。通过可选的 fractionDigits 指定小数的位数。
+
+- toPrecision(?precision)
+
+返回指定位数表示的数值字符串。通过可选的 precision 指定数值位数。
+
+- toString(?radix)
+
+返回数值的字符串表示。通过可选的 radix 将数值转换为指定基数，radix 在 2 ~ 36 之间，默认值为 10。
+
 ### BigInt 类型
 
 BigInt 是 ES2020 提供的一种新的基本数据类型，用于表示大于 2 ** 53 的整数。Number 类型在超出安全整数范围内的算数运算并不精确。例如：
@@ -722,4 +738,18 @@ ToPrimitive 表示对象转换为原始值，即拆箱转换。其规则如下�
 
 详细规则请前往[官方标准](https://262.ecma-international.org/13.0/#sec-islooselyequal)查看。
 
-## 规范类型
+## 参考
+
+- wikipedia
+- [MDN-JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
+- [ECMAScript 标准](https://262.ecma-international.org/13.0/)
+- [ECMAScript proposals](https://github.com/tc39/proposals)
+- 《你不知道的 JavaScript》中卷
+- 《JavaScript 高级程序设计》（第 4 版）
+- 《JavaScript 权威指南》（原书第 7 版）
+- 《JavaScript 悟道》
+- [《JavaScript for impatient programmers (ES1–ES2022) 》](https://exploringjs.com/impatient-js/toc.html)
+- 《Effective JavaScript——编写高质量 JavaScript 代码的 68 个有效方法》
+- 《JavaScript 编程精解》（原书第 3 版）
+- [《JavaScript 二十年》](https://github.com/doodlewind/jshistory-cn)
+- [重学前端](https://time.geekbang.org/column/article/78884)
