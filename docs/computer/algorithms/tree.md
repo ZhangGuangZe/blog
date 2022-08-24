@@ -40,7 +40,7 @@ class TreeNode {
 
 ### 二叉树的遍历
 
-二叉树的遍历包括前序遍历、中序遍历和后序遍历。这里的前序、中序和后序指的是根节点与左右子树的位置。
+二叉树的遍历包括前序遍历、中序遍历、后序遍历和层次遍历。这里的前序、中序和后序指的是根节点与左右子树的位置。
 
 #### 前序遍历（根-左-右）
 
@@ -80,6 +80,82 @@ function postorderTraversal(root) {
   console.log(root.data);
 }
 ```
+
+#### 层次遍历
+
+层次遍历从根节点开始逐层从左到右遍历所有节点。层次遍历基于广度优先搜索和深度优先搜索算法实现。
+
+##### 基于广度优先搜索算法实现的层次遍历
+
+以队列辅助结构，首先将根节点入队，然后出队当前节点的并将节点值存储在当前层的数组中，最后依次将当前节点的左右子节点加入到队列中，直到下一层没有节点为止。
+
+``` js
+function levelorderTraversal(root) {
+  if (!root) return [];
+
+  const res = [];
+  const queue = [root];
+  while (queue.length) {
+    const level = [];
+    const size = queue.length;
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift();
+      level.push(node.val);
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+    res.push(level);
+  }
+  return res;
+}
+```
+
+##### 基于深度优先搜索（递归）算法实现的层次遍历
+
+通过递归依次将当前深度的节点的值放入到当前层级数组中，并将当前层级信息传给下一次递归，直到递归完所有节点为止。
+
+``` js
+function levelorderTraversal(root) {
+  if (!root) return [];
+
+  const helper = (node, level) => {
+    if (!node) return;
+    if (level >= res.length) {
+      res.push([]);
+    }
+    res[level].push(node.val);
+    helper(node.left, level + 1);
+    helper(node.right, level + 1);
+  };
+
+  const res = [];
+  helper(root, 0);
+  return res;
+}
+```
+
+##### 基于深度优先搜索（迭代）算法实现的层次遍历
+
+以栈作为辅助结构，首先将根节点和根节点的层级信息入栈，然后出栈当前节点和当前节点的层级信息，并将当前节点的值存储到当前层的数组中，最后从右到左将节点放入栈中，直到遍历完所有节点为止。
+
+``` js
+function levelorderTraversal(root) {
+  if (!root) return [];
+
+  const res = [];
+  const stack = [[root, 0]];
+  while (stack.length) {
+    const [node, level] = stack.pop();
+    if (level >= res.length) res[level] = [];
+    res[level].push(node.val);
+    if (node.right) stack.push([node.right, level + 1]);
+    if (node.left) stack.push([node.left, level + 1]);
+  }
+  return res;
+}
+```
+
+以上二叉树遍历的代码时间和空间复杂度都为 O(n)。
 
 ## 二叉搜索树
 
@@ -300,3 +376,4 @@ deleteNode(node, data) {
 - 《学习JavaScript数据结构与算法》（第3版）
 - [数据结构基础系列](https://space.bilibili.com/39312416/video)
 - [算法面试通关 40 讲](https://time.geekbang.org/course/detail/100019701-42706)
+- [Problems-LeetCode](https://leetcode.com/problemset/all/)
