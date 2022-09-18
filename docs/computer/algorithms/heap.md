@@ -1,161 +1,207 @@
 # 堆
 
-**堆**（Heap），也称为**二叉堆**，是一种满足**堆性质**的特殊二叉树，它需要满足一下条件：  
+**（二叉）堆**（Binary heap）是一种基于二叉树的数据结构。堆是一颗完全二叉树，也就是说，除了最底层外，其它层从左到右被节点完全填满，如果最底层不完整，则该层的节点尽可能靠左填充。而且树中每个节点的值都大于等于或小于等于其子节点的值。
 
-- 近似完全二叉树。除了最底层，其它层的节点都从左向右被元素填满，且最底层的节点尽可能的靠左； 
+堆分为**最大堆**和**最小堆**两种。最大堆中的每个节点的值都大于等于其子节点的值，因此，堆的最大节点是根节点，并且子树根节点的值都大于等于其子树所有节点的值；最小堆与最大堆相反，堆中每个节点的值都小于等于其子节点的值，因此，堆的最小节点是根节点，并且子树根节点的值都小于等于其子树所有节点的值。
 
-- 满足堆性质。每个节点的值都大于等于或者小于等于它的子节点的值，前者是**最大堆**，后者为**最小堆**。
+## 堆的表示
 
-堆可以利用数组来实现，堆中的每一个节点对应数组中的一个元素，可以通过 size 属性表示有多少堆元素存储在数组中。可以通过下标来定义父子节点之间的关系，如果从下标为 1 的位置开始存储节点，父节点的位置是 i / 2，左子节点的位置为 2i，右子节点的位置为 2i + 1。
+![heap](../images/algorithm/heap.svg)
 
-以下是最大堆的基础版本的代码实现：
+堆通常用数组来表示。因为堆是一颗完全二叉树，所以存储在数组中更加紧凑，并且通过下标，我们可以很容易的计算得到父子节点的下标。
+
+如果根节点存储在下标为 `1` 的位置上，那么下标为 i 的节点，其左子节点的下标为 `2i`，右子节点的下标为 `2i + 1`，而父节点的下标为 `i / 2`，叶子节点在 n / 2 + 1 ~ n 范围内。
 
 ``` js
-class MaxHeap {
-  constructor() {
-    this.container = [];
-    this.size = 0;
-  }
-  parent(i) {
-    return Math.floor(i / 2);
-  }
+getLeftIndex(i) {
+  return 2 * i;
+}
+getRightIndex(i) {
+  return 2 * i + 1;
+}
+getParentIndex(i) {
+  return Math.floor(i / 2);
+}
+```
 
-  left(i) {
-    return 2 * i;
-  }
+## 堆的操作
 
-  right(i) {
-    return 2 * i + 1;
-  }
+堆的操作主要包括插入元素、删除堆顶元素和获取堆顶元素。不过在讲解这些操作之前，我们先来了解堆化操作，因为堆的插入、删除和堆排序都是围绕它展开的。
 
-  swap(arr, child, parent) {
-    [arr[child], arr[parent]] = [arr[parent], arr[child]];
-  }
+### 堆化
 
-  isEmpty() {
-    return this.size === 0;
+**堆化**（heapify）用于由某些操作导致不满足堆性质（有序性）时，用于维护堆性质的重要过程，而这个过程包括自下而上和自上而下两种情况。
+
+#### 自下而上（heapify-up）
+
+自下而上堆化过程的思路是顺着某个节点所在路径向上比较。如果某个节点与它的父节点不满足堆性质，则交换它和它的父节点来维护堆性质。这个过程会不断重复，直到当前路径上的所有节点满足堆性质为止。
+
+``` js
+heapifyUp(index) {
+  let pos = i || this.container.length - 1;
+  while (pos > 1 && this.container[this.getParentIndex(pos)] < this.container[pos]) {
+    this.swap(this.container, pos, this.getParentIndex(pos));
+    pos = this.getParentIndex(pos);
   }
 }
 ```
 
-以下是堆的几个重要的操作：
+上述代码描述的是最大堆自下而上堆化的过程，如果当前节点不是根节点且大于父节点的值，则交换父子节点的值；否则退出程序。
 
-在堆中插入一个元素时，需要将该元素放到堆的最后一个位置，这样可能会破坏堆性质，需要通过自下而上方式的堆化操作，将不满足条件的子节点与父节点交换，直到满足堆性质为止。
+而最小堆则是在当前节点小于它的父节点时才进行交换操作。
+
+#### 自上而下（heapify-down）
+
+自上而下堆化过程的思路是从根节点开始向下比较。如果某个节点与它的子节点不满足堆性质，则交换不满足堆性质的父子节点来维护堆性质。这个过程会不断重复，直到满足堆性质或到达叶子节点为止。
+
+``` js
+heapifyDown(i = 1) {
+  while (2 * i <= this.size) {
+    let pos = i;
+    const left = this.getLeftIndex(i);
+    const right = this.getRightIndex(i);
+    if (left <= this.size && this.container[i] < this.container[left]) pos = left;
+    if (right <= this.size && this.container[pos] < this.container[right]) pos = right;
+    if (pos === i) break;
+    this.swap(this.container, i, pos);
+    i = pos;
+  }
+}
+```
+
+上述代码描述的是最大堆自上而下堆化的过程，在这个过程中从当前节点和它的子节点中选出最大节点，并将下标存储在 `pos` 中。如果当前节点是最大的，则以该节点为根的子树是最大堆，跳出循环；如果最大元素是某个子节点，则交换父子节点的值，使父子节点满足最大堆的性质。交换后以 `pos` 为根的子树可能不满足最大堆的性质，因此需要循环进一步堆化。
+
+而最小堆则是在当前节点和它的子节点中选出最小节点，然后根据具体情况来看是否需要交换。
+
+堆化的时间复杂度与树的高度成正比，因此为 O(logn)。
+
+### 插入元素
+
+因为堆元素从下标为 1 的位置开始存储，所以我们首先需要增加堆的大小，然后将新元素插入到堆的末尾，最后将新元素通过自下而上堆化交换到合适位置。
 
 ``` js
 insert(data) {
-  this.size++;
-  this.container[this.size] = data;
-  this.heapifyUp();
-  return this.container;
-}
-heapifyUp(index) {
-  let i = index || this.container.length - 1;
-  while (i > 1 && this.container[this.parent(i)] < this.container[i]) {
-    this.swap(this.container, i, this.parent(i));
-    i = this.parent(i);
-  }
+  this.container[++this.size] = data;
+  this.heapifyUp(this.size);
 }
 ```
 
-在堆中获取堆顶元素时，只需获取堆中第一个元素即可。
+插入元素的时间复杂度为 O(logn)。
 
-``` js
-peek() {
-  return this.isEmpty() ? undefined : this.container[1];
-}
-```
+### 删除堆顶元素
 
-在堆中删除堆顶元素时，首先将堆的最后一个元素与第一个元素交换，然后将堆的大小减 1，最后通过自上而下的堆化操作将不满足条件的父子节点进行交换，直到满足堆性质为止。
+我们首先需要使用堆的最后一个元素来替换堆顶元素，然后减小堆的大小并将新的堆顶元素通过自上而下堆化交换到合适位置，最后返回删除后的堆顶元素。
 
 ``` js
 remove() {
-  if (this.isEmpty()) return undefined;
+  if (this.isEmpty()) return;
 
-  let value = this.container[1];
-  this.container[1] = this.container[this.size];
-  this.size--;
-  this.heapifyDown(this.container, 1);
-
-  return value;
-}
-heapifyDown(arr, i) {
-  let l = this.left(i);
-  let r = this.right(i);
-  let largest = i;
-
-  if (l <= this.size && arr[l] > arr[i]) largest = l;
-  if (r <= this.size && arr[r] > arr[largest]) largest = r;
-  if (i === largest) return;
-  else {
-    this.swap(arr, i, largest);
-    this.heapifyDown(arr, largest);
-  }
+  let val = this.peek();
+  this.container[1] = this.container[this.size--];
+  this.heapifyDown(1);
+  return val;
 }
 ```
 
-堆的插入和删除操作的核心是**堆化**，堆化是一个维护堆性质的过程，它的时间复杂度为 O(logn) 或者 O(h)，h 为树的高度。
+删除堆顶元素的时间复杂度为 O(logn)。
+
+### 获取堆顶元素
+
+堆顶元素是堆的第一个元素，如果堆不为空，我们返回堆顶元素。
+
+``` js
+peek() {
+  if (!this.isEmpty()) return this.container[1];
+}
+```
+
+获取堆顶元素的时间复杂度为 O(1)。
+
+### 其它操作
+
+`isEmpty()` 用于判断堆是否为空。
+
+``` js
+isEmpty() {
+  return this.size === 0;
+}
+```
 
 ## 堆排序
 
-**堆排序**是一种基于堆这种数据结构而实现的排序算法，我们可以通过堆排序将最大堆的数据从小到大（升序）排列，将最小堆的数据从大到小（降序）排列。
+**堆排序**（Heapsort）是一种在堆数据结构中基于比较的排序算法。其思想是先将未排序数组建成一个堆，然后从堆中不断的提取堆顶元素到已排序数组中，直到堆为空为止。
 
-堆排序的实现步骤如下：
+我们可以通过堆排序将最大堆的数据从小到大（升序）排列，将最小堆的数据从大到小（降序）排列。
 
-1. **建堆**。是将一组无序的数组数据转化为最大堆（最小堆）的过程；
+![堆排序示例图](https://upload.wikimedia.org/wikipedia/commons/4/4d/Heapsort-example.gif)
 
-2. 交换。将堆的最后一个元素与第一个元素交换；
+堆排序可以分为建堆和排序两个阶段。
 
-3. 调整。将堆的大小减 1；
+### 建堆
 
-4. 堆化。新的根节点可能不满足堆的性质，需要通过堆化来构造一个新的堆。
+建堆阶段有两种实现思路。
 
-一直从第二步开始重复，直到堆的大小为 1 为止。
+第一种思路（如上图）是从左到右将未排序数组元素插入到堆的末尾，然后利用自上而下堆化建堆。
 
-堆排序的代码实现如下：
+第二种思路是从右到左利用自上而下堆化建堆。
+
+后者的性能要优于前者。因为数组下标为 n / 2 + 1 ~ n 的元素是树的叶子节点，每个叶子节点可以看做大小为 1 的子堆，而这些叶子节点不需要堆化，一开始我们只需要扫描数组中的一半元素，也就是 n / 2  ~ 1 的元素，并对其进行堆化。这样比较和交换的次数少了之后性能就会得到提升。
+
+第二种思路的实现如下：
 
 ``` js
-build(arr) {
-  this.size = arr.length - 1;
-  for (let i = Math.floor(arr.length / 2); i >= 1; i--) {
-    this.heapifyDown(arr, i);
+build(a, n) {
+  for (let i = Math.floor(n / 2); i >= 1; i--) {
+    this.heapify(a, i, n);
   }
-}
-
-sort(arr) {
-  this.build(arr);
-  for (let i = this.size; i > 0; i--) {
-    this.swap(arr, 1, i);
-    this.size--;
-    this.heapifyDown(arr, 1);
-  }
-  return arr;
 }
 ```
 
-因为建堆的时间复杂度为 O(n)，堆化的时间复杂度为 O(logn)，所有堆排序的总的时间复杂度为 O(nlogn)；堆排序是一种原地不稳定的排序，所以堆排序的空间复杂度为 O(1)。
+第一种思路的时间复杂度为 O(nlogn)，第二种思路的时间复杂度为 O(n)。
 
-### 常见运用
+### 排序
 
-1. **优先队列**（Priority Queue）
+排序阶段的思路是交换堆顶元素与堆的最后一个元素的值，并减小堆的大小，通过自上而下的堆化将新的堆顶元素的值移动到合适位置。不断重复这一过程，直到堆为空为止。
 
-优先队列是一种抽象数据类型。优先队列元素的顺序将会遵循高优先级的元素在低优先级之前、优先级相同的先加入的元素在后加入元素之前的规则排列。优先队列可以使用堆或者其他数据结构来实现。
+``` js
+sort(a) {
+  let n = a.length - 1;
+  this.build(a, n);
+  while (n > 1) {
+    this.swap(a, 1, n--);
+    this.heapify(a, 1, n);
+  }
+}
+```
 
-（实现）
+::: tip
+建堆和排序阶段使用的 heapify 方法与 heapifyDown 方法的代码相同，只不过 heapify 将需要排序的数组作为堆，而不需要额外的空间。
+:::
 
-2. 求 TOP K
+因为建堆阶段的时间复杂度为 O(n)，排序阶段的时间复杂度为 O(nlogn)，所以堆排序总的时间复杂度为 O(nlogn)，关键在于最坏情况时间复杂度也为 O(nlogn)。
 
-求 TOP K 问题需要维护一个大小为 k 的最小堆，依次从数组中取出数据与堆顶比较。如果该元素比堆顶大，则删除堆顶元素，然后插入该元素；如果该元素比堆顶小，则不做处理。这样最终将会等到一个 TOP k 的堆。
+堆排序是原地排序算法。因为建堆和排序都是在原数组中进行，所以空间复杂度为 O(1)。
 
-相关 LeetCode 题：
+堆排序是不稳定排序算法。因为在排序过程中会改变值相同元素的先后顺序。
 
-- [347.前 k 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/)
-- [692.前 k 个高频单词](https://leetcode-cn.com/problems/top-k-frequent-words/)
+堆排序适合在内存受限的环境中使用，因为不需要额外空间。不过在堆化过程中很少比较相邻的数组元素，因此无法利用 CPU 缓存加速访问数组元素。
 
-3. 求中位数
+关于堆的详细代码，请点击[这里](https://github.com/ZhangGuangZe/data-structures-and-algorithms-in-javascript/blob/master/heap/Heap.js)查看。
 
-求中位数问题需要维护一个最大堆和一个最小堆，且最小堆的所有元素都要大于最大堆的堆顶元素。依次将数组的元素插入到最大堆或者最小堆中，如果该元素小于等于最大堆堆顶元素，将该元素插入到最大堆中，否则将该元素插入到最小堆中。在插入元素的过程中，需要根据当前插入元素个数动态调整最大堆和最小堆，如果当前插入元素的个数为奇数，则需要将 n / 2 + 1 个数据存储在最小堆中，将 n / 2 个数据存储在最大堆中；如果当前插入元素的个数为偶数，则最大堆和最小堆都需要存储 n / 2 个元素。如果最终插入元素的个数为奇数时，则中位数是最小堆的堆顶，如果最终插入元素的个数为偶数时，则中位数为最大堆和最小堆堆顶的算术平均值。
+## 应用场景
 
-相关 LeetCode 题：
+除了堆排序外，堆还应用于以下场景：
 
-- [295.数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)
+- 优先队列
+- 图算法
+- 求 TOP K
+- 求中位数
+
+## 参考
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
+- 《算法导论》
+- 《算法》（第4版）
+- 《数据结构与算法之美》
+- 《学习JavaScript数据结构与算法》（第3版）
+- [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms)

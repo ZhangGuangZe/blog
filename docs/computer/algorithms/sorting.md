@@ -354,9 +354,12 @@ bucketSort([11, 9, 6, 8, 1, 3, 5, 1, 1, 0, 100], 10);
 | 选择排序    | 基于比较    | O(n²)    | O(n²)        | O(n²)      | O(1)         | 不稳定    |
 | 插入排序    | 基于比较    | O(n)     | O(n²)        | O(n²)      | O(1)         | 稳定      |
 | 归并排序    | 基于比较    | O(nlogn) | O(nlogn)     | O(nlogn)   | O(n)         | 稳定      |
+| 堆排序      | 基于比较    | O(nlogn) | O(nlogn)     | O(nlogn)   | O(1)         | 不稳定    |
 | 快速排序    | 基于比较    | O(nlogn) | O(nlogn)     | O(n²)      | O(logn) 原地 | 不稳定    |
 | 计数排序    | 基于计算    | ——       | O(k + n)     | O(k + n)   | O(k + n)     | 稳定      |
 | 桶排序      | 基于计算    | ——       | O(n)         | O(n²)      | O(k + n)     | 稳定      |
+
+堆排序的思想和实现将在[堆](./heap.md)中详细讲解。
 
 关于更多算法的可视化，可以点击[这里](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)查看。
 
