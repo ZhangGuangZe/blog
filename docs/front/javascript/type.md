@@ -99,7 +99,7 @@ str[2] // => l
 
 用于返回 BMP 范围内指定代码单元索引的代码点。
 
-- codePointAt(pos`<sup>(ES6)</sup>
+- codePointAt(pos)<sup>(ES6)</sup>
 
 用于返回辅助平面范围内指定代码单元索引位置的代码点。
 
@@ -542,7 +542,7 @@ const y = BigInt(9007199254740991);
 
 ### Object 类型
 
-Object 类型用于表示复杂的数据，这里的 Object 指的是广义上的对象，主要包括 `Object`、`Array`、`Function`、`RegExp` 和 `Date` 等对象，而不是狭义上的 `Object` 对象。
+Object 类型用于表示复杂的数据，关于对象的更多内容将在[面向对象编程](./object-oriented-programing.md#对象)中讲到。
 
 ### 类型检测
 

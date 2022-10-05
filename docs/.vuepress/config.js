@@ -44,7 +44,7 @@ module.exports = {
             // },
             {
                 text: 'GitHub',
-                link: 'https://github.com/HotZhang'
+                link: 'https://github.com/ZhangGuangZe'
             }
         ],
 
@@ -69,6 +69,7 @@ module.exports = {
                         ['/front/javascript/history', '发展史'],
                         ['/front/javascript/structure', '语言结构'],
                         ['/front/javascript/type', '类型系统'],
+                        ['/front/javascript/object-oriented-programing', '面向对象编程'],
                     ]
                 },
                 {
