@@ -6,7 +6,7 @@
 
 ### 创建对象
 
-我们可以通过对象字面量来创建对象，也可以使用 `Object` 等内置构造函数或自定义构造函数创建对象。
+我们可以通过对象字面量、`new` 关键字组合构造函数和 `Object.create()` 创建对象。后两种方式将会在 [JavaScript 面向对象的演进](#javascript-面向对象的演进)中讲解。
 
 #### 对象字面量
 
@@ -97,15 +97,53 @@ o.foo = 'baz';
 
 ### 删除属性
 
-我们可以通过 `delete` 操作符删除属性。
+我们可以通过 `delete` 操作符删除对象的**自有属性**。如果删除成功则返回 `true`，如果删除无意义的操作数也会返回 `true`，表示什么也不做。
 
 ``` js
-const o = {
-  foo: 'bar'
-};
-delete o.foo;
-o.foo; // => undefined
+const o = { a: 1 };
+delete o.a; // => true 成功删除属性
+delete o.b; // => true 删除不存在的属性（无意义）
+delete 0;   // => true 删除的不是对象属性（无意义）
 ```
+
+如果删除不可配置属性则会返回 `false`，通过变量声明或函数声明创建的全局对象的属性也是不可配置属性。
+
+``` js
+// 删除对象不可配置属性
+const o = {};
+Object.defineProperty(o, 'a', { configurable: false });
+delete o.a;       // => false
+
+// 删除全局对象不可配置属性
+var b = 1;
+delete b;         // => false
+
+function f() {}
+delete f;         // => false
+
+delete undefined; // => false
+```
+
+在严格模式下，如果删除的是不可配置的属性，则会导致 `TypeError`；如果删除的是非限定标识符（变量、函数名称和函数参数），则会导致 `SyntaxError`，操作数必须使用属性访问表达式才能避免语法错误。
+
+``` js
+'use strict';
+const o = {};
+Object.defineProperty(o, 'a', { configurable: false });
+delete o.a; // => TypeError
+
+let b = 1;
+delete b; // => SyntaxErr
+
+function f() {}
+delete f; // => SyntaxErr
+
+delete globalThis.name //  => true
+```
+
+::: tip
+`Object.defineProperty` 用于定义属性特性，在元编程章节中将会深入讲解。
+:::
 
 ### 检查属性
 
@@ -382,18 +420,6 @@ o === copy; // => false
 
 基于类的编程风格关注**实体与实体之间的关系**，先有类，类和类之间通过**继承**、**组合**等机制建立关联关系，再通过类来实例化对象。子类继承父类和通过类实例化对象本质上是一种**复制**。
 
-类包含如下几种结构：
-
-- 构造函数 用来实例化对象
-
-- 静态成员 属于类
-
-- 实例成员 属于对象
-
-- 公有成员
-
-- 私有成员
-
 #### 封装（Encapsulation）
 
 封装是指将数据和操作数据的方法捆绑在一起，或者隐藏对象的内部结构限制用户直接访问，从而保护对象的完整性。在一些编程语言中，只允许通过方法访问或者通过关键字来限制访问。
@@ -402,7 +428,7 @@ o === copy; // => false
 
 继承是将一个类基于另一个类的机制，从现有类（超类或基类）派生新类（子类），然后形成类的层次结构。子类通过继承获取父类的所有属性和行为，从而实现代码复用。
 
-有些编程语言支持多重继承，即一个子类拥有多个父类，例如 C++，而在有些编程语言中只支持单一继承，即一个子类只能拥有一个父类，例如 Java，不过 Java 可以通过接口来实现多继承。
+有些编程语言支持多继承，即一个子类拥有多个父类，例如 C++，而有些编程语言只支持单继承，即一个子类只能拥有一个父类，例如 Java，不过 Java 可以通过接口来实现多继承。
 
 基于继承实现代码复用存在两个主要问题：
 
@@ -422,7 +448,7 @@ o === copy; // => false
 
 在基于原型的编程风格中，对象是主要实体，甚至不存在类，对象直接定义自己的状态和行为。
 
-基于原型的面向对象常出现在静态语言中，例如 JavaScript。
+基于原型的面向对象常出现在动态语言中，例如 JavaScript。
 
 基于原型的编程风格只关注**对象之间的关联关系**，先关注对象的行为，然后才关心如何将对象划分到相似的原型对象。对象之间的关联本质上是一种**委托**机制。
 
@@ -440,7 +466,7 @@ JavaScript 同时支持显示和隐式委托。当通过各种语法（例如成
 
 出于对 Self 的认可和为了节省实现成本，Brendan Eich 选择带有**单个原型链接的委托机制**，来创建动态的对象模型。但由于时间关系该机制未能暴露在 Mocha 原型中。
 
-JavaScript 1.0 通过使用 `Object` 等内置构造函数或者自定义构造函数的方式创建对象。自定义对象时，对象的所有数据属性和方法都必须包含在构造函数中，方法在每次实例化时都会重新创建一遍，而且这些方法是全局可见的函数。
+JavaScript 1.0 通过构造函数创建对象，但不支持继承。构造函数像类一样可以声明数据属性和方法。不过，方法在每次实例化时都会重新创建一遍，而且这些方法是全局可见的函数。
 
 ``` js
 function pGreet() {
@@ -456,7 +482,7 @@ var person = new Person('front-boy');
 person.greet();
 ```
 
-JavaScript 1.1 通过原型对象解决了方法在实例化时的重复创建问题，方法现在只需在原型对象上挂载一次。原型对象的属性只能通过函数对象的 `prototype` 属性访问。
+JavaScript 1.1 将原型继承（委托）机制暴露了出来。我们通过函数对象的 `prototype` 属性，将原型对象与函数对象关联起来。通过 `new` 操作符会克隆出继承自原型对象属性的实例。
 
 ``` js
 function pGreet() {
@@ -470,14 +496,16 @@ function Person(name) {
 Person.prototype.greet = pGreet;
 
 var person = new Person('front-boy');
-person.greet(); // => "Hi, I'm front-boy."
+person.greet();
 ```
+
+通过原型对象解决了方法在实例化时的重复创建问题，方法现在只需在原型对象上挂载一次。
 
 由原型对象提供的属性称为**继承属性**，而直接在对象是定义的属性称为**自有属性**。在访问属性时，如果对象上有一个与原型对象同名的属性，那么自有属性会覆盖继承属性。
 
-JavaScript 1.1 的对象模型是 Self 模型的一种变体。对象通过 `new` 操作符克隆实例，实例通过继承（隐式委托）间接的访问原型对象的共享属性。
+![Object Model](../images/object-model.png)
 
-原型对象有一个 `constructor` 属性，用于返回用于创建实例对象的构造函数。
+<div style="text-align: center;">图 JavaScript 对象模型</div>
 
 JavaScript 1.2 增加了受 Python 启发的对象字面量。这为创建和初始化对象提供了简洁语法。
 
@@ -547,9 +575,9 @@ const john = new Employee('John', 'CTO');
 john.describe(); // => 'Person named John（CTO）'
 ```
 
-从代码可以看出，子类（Employee）需要通过函数对象的 `call` 方法借用父类（Person）的构造函数和方法实现多态效果，并且需要使用函数对象的 `prototype` 与 Person 的实例关联实现继承。
+从以上代码可以看出，子类（Employee）需要通过函数对象的 `call` 方法借用父类（Person）的构造函数和方法实现多态效果，并且需要使用函数对象的 `prototype` 与 Person 的实例关联实现继承。
 
-我们可以用 `instanceof` 操作符来检测实例的类型。不过，与 Java 不同的是，JavaScript 的 `instanceof` 存在动态语义（遍历实例的原型链，搜索构造函数的原型对象）。
+我们可以用 `instanceof` 操作符来检测实例的类型。不过，与 Java 不同的是，JavaScript 的 `instanceof` 存在动态语义——遍历实例的原型链，搜索构造函数的原型对象。
 
 ``` js
 john instanceof Person; // => true
@@ -580,6 +608,21 @@ function Employee(name, title) {
 
 const john = new Employee('John', 'CTO');
 john.describe(); // => 'Person named John（CTO）'
+```
+
+通过模拟的继承存在一个问题，那就是实例的 `constructor` 属性（从原型对象继承而来，表示由谁构造）被意外的修改成了 Person，而不是 Employee。
+
+``` js
+// 续上例
+john.constructor === Person; // => true 
+```
+
+为了修复这个问题，需要手动维护原型的 `constructor` 属性。
+
+``` js {2}
+// 续上例
+Employee.prototype.constructor = Employee;
+john.constructor === Employee; // => true 
 ```
 
 ### 基于原型的面向对象
@@ -628,17 +671,25 @@ john.setTitle('John', 'CTO');
 john.describe(); // => 'Person named John（CTO）'
 ```
 
-我们可以通过 ES5 的 `Object.getPrototypeOf()` 获取指定对象的原型。
+我们可以通过 `Object.getPrototypeOf()` 和 `Object.setPrototypeOf()` 方法获取和设置指定对象的原型。
 
 ``` js
+// 续上例
 Object.getPrototypeOf(john) === employee; // => true
+const prototype = {};
+Object.setPrototypeOf(john, prototype);
+Object.getPrototypeOf(john) === prototype; // => true
 ```
+
+::: tip
+可以通过 `Object.create(null)` 创建一个没有原型的新对象。
+:::
 
 ### 基于类的面向对象
 
 JavaScript 从早期只有对象没有类；到 1996 年首次 TC39 会议提出在语言中添加类特性的提案；再到 ES4 对类特性的两次失败尝试，再到社区通过 ES5 的特性模拟类和实现继承；最终，ES6 统一了社区方案，根据现有的对象模型（构造函数、原型对象和实例对象三要素），新增了语法简单并且语义轻量的 max-min 类，并在 ES2022 中增加类字段完善了类特性。
 
-虽然 JavaScript 有了一套基于类的面向对象系统，可以提供高完整性的对象和更好地封装代码。但是 JavaScript 中的类与其他语言中的类不太一样，因为它基于原型继承（委托）机制，类与实例之间的关系基于原型继承，子类与父类之间的关系基于原型继承。
+虽然 JavaScript 有了一套基于类的面向对象系统，可以提供高完整性的对象和更好地封装代码，并且解决了模拟类存在的一些问题。但是 JavaScript 中的类与其他语言中的类不太一样，因为它基于原型继承（委托）机制，类与实例之间的关系基于原型继承，子类与父类之间的关系基于原型继承。
 
 #### 定义类
 
@@ -654,11 +705,11 @@ const Person = class { ... };
 const Person = class ClassName { ... };
 ```
 
-虽然 ES6 的类基于函数构建，并且都是一等公民，但与函数声明不同，类声明不支持提升，并且类体中的代码默认出于严格模式。
+虽然 ES6 的类基于函数构建，并且都是一等公民，但与函数声明不同，类声明不支持提升，并且类体中的代码默认处于严格模式。
 
 #### 构造函数
 
-通过类定义创建的实例必须由 `new` 操作符调用类中的构造函数完成。其原理与 `new` 操作符调用函数一致，这里就不在赘述。
+通过类定义创建的实例必须由 `new` 操作符调用类中的构造函数完成。
 
 ``` js
 class Person {
@@ -676,7 +727,6 @@ const person = new Person('front-boy');
 在 ES6 的类中，实例属性必须在构造函数中定义。
 
 ``` js
-// ES6 中的实例属性
 class Person {
   constructor(name) {
     this.name = name;
@@ -853,6 +903,10 @@ class Person {
 Person.create('front-boy');
 ```
 
+::: tip
+关于类字段的更多细节可以查看 hex 的[《关于JS的field提案的一个小思考》](https://zhuanlan.zhihu.com/p/47310567)和[《勉为其难再次喷一下 private fields》](https://zhuanlan.zhihu.com/p/150244331)文章。
+:::
+
 #### 继承
 
 从 ES6 开始，我们可以通过 `extends` 关键字扩展现有类，并通过 `super` 关键字调用父类构造函数或者覆盖父类方法。
@@ -946,7 +1000,7 @@ s.baz();
 
 但是因为 `this` 是在运行时动态绑定的，它的指向取决于**函数的调用方式**，所以相同的 `this` 在不同场景下的语义可能不同。这也导致 `this` 指向出现了一些混乱和 bug。
 
-在 JavaScript 中，`this` 可以出现在对象方法、独立函数和事件处理器中并且具有相同的语义；而在大多数语言中，`this` 只能出现在类中。这样其他语言的开发在来学习 JavaScript 时产生混乱。
+在 JavaScript 中，`this` 可以出现在对象方法、独立函数和事件处理器中并且具有相同的语义；而在大多数语言中，`this` 只能出现在类中。这使其他语言的开发者学习 JavaScript 时产生混乱。
 
 直接调用函数时，`this` 则指向全局对象，这是 JavaScript 设计存在的公认 bug 之一。不过，该 bug 可以通过严格模式来解决，这样 `this` 将会指向 `undefined`。
 
@@ -956,7 +1010,7 @@ s.baz();
 
 ## 参考
 
-- wikipedia
+- [Wikipedia](https://en.wikipedia.org/wiki/Object-oriented_programming)
 - [MDN-JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
 - [ECMAScript proposals](https://github.com/tc39/proposals)
 - 《你不知道的 JavaScript》上卷
@@ -964,7 +1018,6 @@ s.baz();
 - 《JavaScript 权威指南》（原书第 7 版）
 - 《JavaScript 悟道》
 - [《JavaScript for impatient programmers (ES1–ES2022) 》](https://exploringjs.com/impatient-js/toc.html)
-- 《Effective JavaScript——编写高质量 JavaScript 代码的 68 个有效方法》
 - 《JavaScript 编程精解》（原书第 3 版）
 - 《深入理解 JavaScript 特性》
 - [《JavaScript 二十年》](https://github.com/doodlewind/jshistory-cn)
