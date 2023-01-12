@@ -70,6 +70,7 @@ module.exports = {
                         ['/front/javascript/structure', '语言结构'],
                         ['/front/javascript/type', '类型系统'],
                         ['/front/javascript/object-oriented-programing', '面向对象编程'],
+                        ['/front/javascript/functional-programing', '函数式编程'],
                     ]
                 },
                 {
@@ -101,8 +102,9 @@ module.exports = {
                         ['/computer/algorithms/hash-table', '散列表'],
                         ['/computer/algorithms/tree', '树'],
                         ['/computer/algorithms/heap', '堆'],
-                        ['/computer/algorithms/graph', '图'],
-                        ['/computer/algorithms/strings', '字符串匹配算法']
+                        ['/computer/algorithms/trie', 'Trie 树'],
+                        // ['/computer/algorithms/graph', '图'],
+                        // ['/computer/algorithms/strings', '字符串匹配算法']
                     ]
                 }
             ],
