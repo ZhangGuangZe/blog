@@ -6,7 +6,7 @@
 
 ## 堆的表示
 
-![heap](../images/algorithm/heap.svg)
+![heap](../images/algorithm/heap.png)
 
 堆通常用数组来表示。因为堆是一棵完全二叉树，所以存储在数组中更加紧凑，并且通过下标，我们可以很容易的计算得到父子节点的下标。
 
