@@ -103,6 +103,7 @@ module.exports = {
                         ['/computer/algorithms/tree', '树'],
                         ['/computer/algorithms/heap', '堆'],
                         ['/computer/algorithms/trie', 'Trie 树'],
+                        ['/computer/algorithms/greedy', '贪心算法'],
                         // ['/computer/algorithms/graph', '图'],
                         // ['/computer/algorithms/strings', '字符串匹配算法']
                     ]
