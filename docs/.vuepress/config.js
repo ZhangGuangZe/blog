@@ -96,7 +96,7 @@ module.exports = {
                         ['/computer/algorithms/linked-list', '链表'],
                         ['/computer/algorithms/stack', '栈'],
                         ['/computer/algorithms/queue', '队列'],
-                        ['/computer/algorithms/divide-and-conquer', '递归 & 分治'],
+                        ['/computer/algorithms/recursion', '递归'],
                         ['/computer/algorithms/sorting', '排序算法'],
                         ['/computer/algorithms/binary-search', '二分查找'],
                         ['/computer/algorithms/hash-table', '散列表'],
@@ -104,6 +104,7 @@ module.exports = {
                         ['/computer/algorithms/heap', '堆'],
                         ['/computer/algorithms/trie', 'Trie 树'],
                         ['/computer/algorithms/greedy', '贪心算法'],
+                        ['/computer/algorithms/design', '算法设计'],
                         // ['/computer/algorithms/graph', '图'],
                         // ['/computer/algorithms/strings', '字符串匹配算法']
                     ]
