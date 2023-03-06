@@ -108,6 +108,19 @@ module.exports = {
                         // ['/computer/algorithms/graph', '图'],
                         // ['/computer/algorithms/strings', '字符串匹配算法']
                     ]
+                },
+                {
+                    title: '网络协议',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ['/computer/protocols/', '简介'],
+                        ['/computer/protocols/udp', 'UPD 协议'],
+                        /* ['/computer/protocols/tcp', 'TCP 协议'],
+                        ['/computer/protocols/http', 'HTTP 协议'],
+                        ['/computer/protocols/https', 'HTTPS 协议'],
+                        ['/computer/protocols/dns', 'DNS'] */
+                    ]
                 }
             ],
             '/summarize/': [{
