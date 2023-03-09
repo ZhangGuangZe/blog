@@ -6,7 +6,7 @@ UDP（User Datagram Protocol），即用户数据报协议。是一个**简单**
 
 - 基于数据报
 
-UDP 只是在 IP 包的基础上做了简单封装，数据传输基于数据报，不需要保证数据报发送、到达时间和到达顺序。所以有时也称为不可靠的数据报协议。
+基于数据报，不需要保证数据报发送、到达时间和到达顺序。所以有时也称为不可靠的数据报协议。
 
 - 无状态
 
@@ -42,5 +42,5 @@ UDP 只是在 IP 包的基础上做了简单封装，数据传输基于数据报
 
 ## 参考
 
-- (Wikipedia)[https://en.wikipedia.org/wiki/User_Datagram_Protocol]
-- (趣谈网络协议)[https://time.geekbang.com/column/article/8924]
+- [Wikipedia](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
+- [趣谈网络协议](https://time.geekbang.com/column/article/8924)
