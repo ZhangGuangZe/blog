@@ -117,8 +117,8 @@ module.exports = {
                         ['/computer/protocols/', '简介'],
                         ['/computer/protocols/udp', 'UPD 协议'],
                         ['/computer/protocols/tcp', 'TCP 协议'],
-                        /* ['/computer/protocols/http', 'HTTP 协议'],
-                        ['/computer/protocols/https', 'HTTPS 协议'],
+                        ['/computer/protocols/http', 'HTTP 协议'],
+                        /* ['/computer/protocols/https', 'HTTPS 协议'],
                         ['/computer/protocols/dns', 'DNS'] */
                     ]
                 }
