@@ -1,6 +1,6 @@
 # HTTP 协议
 
-**HTTP**（HyperText Transfer Protocol），即超文本传输协议协议。是一种用于传输**超文本**信息的**无状态**应用层协议。
+**HTTP**（HyperText Transfer Protocol），也称为 HTTP over TCP/IP，即超文本传输协议。是一种用于传输**超文本**信息的**无状态**应用层协议。
 
 为了实现在互联网中构建一个可共享的超文本信息系统，Tim Berners-Lee 发明了万维网，使用 HTTP 来传输超文本。
 
@@ -289,4 +289,4 @@ HTTP/2 虽然极大的提升了传输的效率，但是受限于 TCP，在传输
 - [透视 HTTP 协议](https://time.geekbang.com/column/intro/100029001)
 - [浏览器工作原理与实践](https://time.geekbang.com/column/article/147501)
 - [趣谈网络协议](https://time.geekbang.com/column/article/9410)
-- [图解HTTP](https://book.douban.com/subject/25863515/)
+- 《图解HTTP》
