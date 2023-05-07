@@ -119,7 +119,7 @@ module.exports = {
                         ['/computer/protocols/tcp', 'TCP 协议'],
                         ['/computer/protocols/http', 'HTTP 协议'],
                         ['/computer/protocols/https', 'HTTPS 协议'],
-                        /* ['/computer/protocols/dns', 'DNS'] */
+                        ['/computer/protocols/dns', 'DNS 协议']
                     ]
                 }
             ],
