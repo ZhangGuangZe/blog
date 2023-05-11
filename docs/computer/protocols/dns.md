@@ -1,4 +1,4 @@
-# DNS
+# DNS 协议
 
 **DNS**（Domain Name System），即域名系统，是一个分层的分布式命名系统。
 
