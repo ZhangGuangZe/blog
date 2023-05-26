@@ -104,6 +104,7 @@ module.exports = {
                         ['/computer/algorithms/heap', '堆'],
                         ['/computer/algorithms/trie', 'Trie 树'],
                         ['/computer/algorithms/design', '算法设计'],
+                        ['/computer/algorithms/disjoint-set', '并查集'],
                         // ['/computer/algorithms/graph', '图'],
                         // ['/computer/algorithms/strings', '字符串匹配算法']
                     ]
