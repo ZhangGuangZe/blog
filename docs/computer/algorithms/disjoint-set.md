@@ -104,8 +104,10 @@ class DisjointSet {
     }
   }
   find(x) {
-    if (x === this.parents[x]) return x;
-    this.parents[x] = this.find(this.parents[x]);
+    if (this.parents[x] !== x) {
+      this.parents[x] = this.find(this.parents[x]);
+    }
+    return this.parents[x];
     /*
     路径压缩迭代实现
     let root = x;
