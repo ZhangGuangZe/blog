@@ -4,7 +4,7 @@
 
 如果顶点之间的边是有方向的，则该图称为**有向图**，否则称为**无向图**。
 
-如果顶点之间的边是有权重的，则该图称为**带权图**。
+如果顶点之间的边是有权重（距离、时间、花费等）的，则该图称为**带权图**。
 
 如果顶点之间都存在连接对方的路径时，则该图称为**连通图**。
 
@@ -16,7 +16,7 @@
 
 邻接矩阵通过一个二维数组来表示顶点之间的连接关系。
 
-对于无向图，如果顶点 i 与顶点 j 相连，则 `adjMatrix[i][j]` 和 `adjMatrix[j][i]` 为 1；对于有向图，如果顶点 i 指向顶点 j，则 `adjMatrix[i][j]` 为 1；对于带权图，则 `adjMatrix[i][j]` 表示顶点间边的权重。
+对于无向图，如果顶点 u 与顶点 v 相连，则 `adjMatrix[i][u]` 和 `adjMatrix[v][u]` 为 1。
 
 以下是无向图的邻居矩阵表示示例。
 
@@ -30,6 +30,23 @@ class GraphByAdjMatrix {
   addEdge(u, v) {
     this.adjMatrix[u][v] = 1;
     this.adjMatrix[v][u] = 1;
+  }
+}
+```
+
+对于有向图，如果顶点 u 指向顶点 v，则 `adjMatrix[u][v]` 为 1；对于带权图，则 `adjMatrix[u][v]` 表示顶点间边的权重 w。
+
+以下是有向带权图的邻接矩阵表示示例。
+
+``` js
+class WeightedDigraphByAdjMatrix {
+  constructor(vertices) {
+    this.vertices = vertices;
+    this.adjMatrix = Array.from({ length: vertices }, () => new Array(vertices).fill(0));
+  }
+
+  addEdge(u, v, w) {
+    this.adjMatrix[u][v] = w;
   }
 }
 ```
@@ -76,6 +93,21 @@ class DigraphByAdjList {
 ```
 
 对于带权图，与顶点相连的的所有顶点及权重都会存储到对应列表中。
+
+以下是有向带权图的邻接表表示示例：
+
+``` js
+class WeightedDigraphByAdjList {
+  constructor(vertices) {
+    this.vertices = vertices;
+    this.adjList = Array.from({ length: vertices }, () => []);
+  }
+
+  addEdge(u, v, w) {
+    this.adjList[u].push([v, w]);
+  }
+}
+```
 
 通过邻接表表示的优点在于灵活，并且节省存储空间，空间复杂度为 O(V + E)。而缺点则是无法快速判断两个顶点之间是否存在连接关系，时间复杂度为 O(degree)，不过可以使用其他高效数据结构（哈希表、跳表和红黑树等）来提高查询效率。因此，邻接表适用于表示**稀疏图**（E 远远小于 V²）。
 
@@ -201,11 +233,11 @@ topologicalSortByKahn() {
 
 ### 广度优先搜索
 
-广度优先搜索从起始顶点开始，逐层访问相邻顶点，直到遍历完整个图为止。
+广度优先搜索从起始顶点开始，逐层访问当前顶点的相邻顶点，直到找到目标顶点或者遍历完整个图为止。
 
 广度优先搜索需要通过队列来实现。
 
-我们从指定起始顶点开始遍历，将其标记为已访问并入队。如果队列不为空，则出队一个顶点，然后将其未访问的邻居顶点标记为已访问并入队。重复以上操作直到图中所有顶点被访问为止。
+我们从指定起始顶点开始遍历，将其标记为已访问并入队。如果队列不为空，则出队一个顶点，然后将其未访问的邻居顶点标记为已访问并入队。重复以上操作直到找到目标顶点或者图中所有顶点被访问为止。
 
 ``` js
 function bfs(graph, startVertex, visited) {
@@ -236,9 +268,201 @@ function breathFirstSearch(graph) {
 
 广度优先搜索的空间复杂度取决于队列和 `visited` 数组。最坏情况下，可能需要存储所有顶点，因此空间复杂度为 O(V)。
 
-广度优先搜索适用于解决连通性问题、层级相关问题和寻找两点之间的最短路径等问题。
+广度优先搜索适用于解决连通性问题、层级相关问题和寻找非带权图中的最短路径问题等。
+
+以下代码是使用 BFS 寻找最短路径的实现。
+
+``` js
+function bfsShortestPaths(graph, startVertex) {
+  const vertices = graph.length;
+  const queue = [startVertex];
+  const visited = new Array(vertices).fill(false);
+  visited[startVertex] = true;
+
+  const distances = {};
+  const predecessors = {};
+
+  for (let i = 0; i < vertices; i++) {
+    distances[i] = 0;
+    predecessors[i] = null;
+  }
+
+  while (queue.length > 0) {
+    const v = queue.shift();
+
+    for (const w of graph[v]) {
+      if (!visited[w]) {
+        visited[w] = true;
+        distances[w] = distances[v] + 1;
+        predecessors[w] = v;
+        queue.push(w);
+      }
+    }
+  }
+
+  return { distances, predecessors };
+}
+
+function getPath(predecessors, startVertex, targetVertex) {
+  const path = [];
+  let currVertex = startVertex;
+
+  while (currVertex !== targetVertex) {
+    path.push(currVertex);
+    currVertex = predecessors[currVertex];
+  }
+  path.push(targetVertex);
+
+  return path.reverse();
+}
+```
+
+我们在 BFS 的基础上增加了 `distances` 数组，用于表示起始顶点到当前顶点的距离，`predecessors` 数组，用于表示顶点的前驱顶点。通过当前顶点的前驱顶点回溯到起始顶点，从而得到一条从起始顶点到其它顶点的最短路径。
 
 ## 最短路径算法
+
+**最短路径算法**（Shortest path algorithm）用于解决在带权图中的两顶点之间寻找最短路径问题的算法。最短路径问题可分为单对顶点最短路径问题、单源最短路径问题和多源最短路径问题等。
+
+### Dijkstra 算法
+
+**Dijkstra 算法**解决的是在有向带权图中的单源最短路径问题，不过要求所有边的权重都为非负值。如果图中存在负权边，请使用 **Bellman-Ford** 算法。
+
+Dijkstra 算法有很多变体，原始版本的算法仅适用于寻找两个给定顶点之间的最短路径，更常见的变体用于寻找从单个源顶点到图中所有顶点的最短路径。
+
+Dijkstra 算法的原理是从源顶点开始，逐层找到离源顶点最近的邻居顶点，然后更新该顶点的访问状态，如果有比当前路径更短的路径，则更新其距离和前驱顶点，重复以上过程直到达到目标顶点或者所有顶点的最短路径计算完成为止。
+
+![Dijkstra_Animation](https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif)
+
+以下是朴素 Dijkstra 算法的实现：
+
+``` js
+function dijkstra(graph, sourceVertex) {
+  const distances = {};
+  const visited = {};
+  const predecessors = {};
+  const vertices = graph.length;
+
+  for (let v = 0; v < vertices; v++) {
+    distances[v] = Infinity;
+    predecessors[v] = null;
+  }
+  distances[sourceVertex] = 0;
+
+  for (let v = 0; v < vertices; v++) {
+    let minVertex = -1;
+    for (let i = 0; i < vertices; i++) {
+      if (!visited[i] && (minVertex === -1 || distances[i] < distances[minVertex])) {
+        minVertex = i;
+      }
+    }
+
+    visited[minVertex] = true;
+
+    for (let w = 0; w < vertices; w++) {
+      const newDist = distances[minVertex] + graph[minVertex][w];
+      if (
+        !visited[w] && graph[minVertex][w] !== 0 &&
+        distances[minVertex] !== Infinity && newDist < distances[w]
+      ) {
+        distances[w] = newDist;
+        predecessors[w] = minVertex;
+      }
+    }
+  }
+
+  return { distances, predecessors };
+}
+```
+
+朴素 Dijkstra 算法使用邻接矩阵表示图。`distances` 用于记录从源顶点到其它顶点的最短距离，`predecessors` 表示当前顶点的前驱顶点，我们可以根据其获取从源顶点到其它顶点的最短路径。
+
+首先我们将源顶点自身的距离设置为 0，其它顶点的距离设置为无穷大，并且将每个顶点的前驱顶点设置为 null。其次我们选择距离源顶点最近的候选顶点作为当前顶点，并把其标记为已访问，以免重复计算。然后，对于当前顶点的所有邻居顶点，计算通过当前顶点到邻居顶点的距离并与之前记录的距离比较，如果当前顶点到邻居顶点的距离更短，则更新邻居顶点的距离和前驱顶点。最后继续迭代选择下一个距离源顶点最近的顶点，直到找到目标顶点或者所有顶点的最短路径计算完成为止。
+
+朴素 Dijkstra 算法使用一个循环来不断选择距离源顶点最近的未访问顶点，时间复杂度为 O(V²)，我们可以使用优先队列（最小堆）来进一步优化算法的性能。
+
+以下是基于优先队列优化的 Dijkstra 算法实现：
+
+``` js
+function dijkstraByPriorityQueue(graph, sourceVertex) {
+  const distances = {};
+  const predecessors = {};
+  const vertices = graph.length;
+  const queue = new PriorityQueue((a, b) => a[1] - b[1]);
+
+  for (let v = 0; v < vertices; v++) {
+    distances[v] = Infinity;
+    predecessors[v] = null;
+  }
+  distances[sourceVertex] = 0;
+  queue.insert([sourceVertex, 0]);
+
+  while (!queue.isEmpty()) {
+    const [vertex, weight] = queue.remove();
+
+    for (const [neighbor, distance] of graph[vertex]) {
+      const newDist = distance + weight;
+      if (newDist < distances[neighbor]) {
+        distances[neighbor] = newDist;
+        predecessors[neighbor] = vertex;
+        queue.insert([neighbor, newDist]);
+      }
+    }
+  }
+
+  return { distances, predecessors };
+}
+```
+
+优先队列的操作在[堆](https://zhangguangze.github.io/blog/computer/algorithms/heap.html)文章中讲过，这里就不在赘述。
+
+基于优先队列的 Dijkstra 算法使用邻接表来表示图。初始化时将源顶点及其距离加入到优先队列中。我们从优先队列中取出距离源顶点最近的顶点，然后遍历该顶点的邻居顶点，计算从源顶点到达邻居顶点的距离，如果计算出来的距离小于邻居顶点当前的距离，更新邻居顶点的距离和前驱顶点，并将邻居顶点和最新距离插入到优先队列中。重复以上过程直到找到目标顶点或者优先队列为空为止。
+
+通过优先队列可以将 Dijkstra 算法的时间复杂度优化到 O(E*logV)。V 为顶点的个数，E 为边的数量，优先队列操作的时间复杂度为 O(logV)。
+
+### Floyd–Warshall 算法
+
+**Floyd–Warshall 算法**是一种通过动态规划来解决所有顶点对之间的最短路径算法，它的主要原理是通过中间顶点逐步改进顶点之间的最短路径，直到所有顶点对的最短路径计算完成为止。
+
+``` js
+function floydWarshall(graph) {
+  const vertices = graph.length;
+  const distances = Array.from({ length: vertices }, () => []);
+  const nextVertices = Array.from({ length: vertices }, () => Array(vertices).fill(null));
+
+  for (let i = 0; i < vertices; i++) {
+    for (let j = 0; j < vertices; j++) {
+      distances[i][j] = graph[i][j];
+      if (i !== j && graph[i][j] !== Infinity) {
+        nextVertices[i][j] = j;
+      }
+    }
+  }
+
+  for (let k = 0; k < vertices; k++) {
+    for (let i = 0; i < vertices; i++) {
+      for (let j = 0; j < vertices; j++) {
+        const middleDist = distances[i][k] + distances[k][j];
+        if (middleDist < distances[i][j]) {
+          distances[i][j] = middleDist;
+          nextVertices[i][j] = nextVertices[i][k];
+        }
+      }
+    }
+  }
+
+  return { distances, nextVertices };
+}
+```
+
+我们首先需要创建一个用于计算最短路径值的 `distances` 矩阵和一个用于跟踪最短路径的 `nextVertices` 矩阵。初始化时，我们将每个顶点的权重赋值到 `distances` 矩阵中，如果顶点 `i` 和顶点 `j` 之间存在边，则将当前顶点的下一个顶点保存在 `nextVertices` 矩阵中。
+
+Floyd–Warshall 算法的核心在于通过遍历依次将图中的所有顶点作为中间顶点，然后检查从顶点 `i` 到顶点 `j` 中间经过中间顶点的路径是否比直接从顶点 `i` 到顶点 `j` 的路径更短。如果是则更新这条最短路径的距离和下一个顶点。
+
+图中所有顶点对之间的最短路径计算完成后，返回 `distances` 和 `nextVertices` 矩阵。我们可以利用 `distances` 矩阵获取顶点间的最短路径值，利用 `nextVertices` 矩阵来获取从起始顶点到目标顶点的最短路径。
+
+Floyd–Warshall 算法的时间复杂度为 O(V³)，空间复杂度为 O(V²)，V 为图中顶点的个数。
+
+Floyd–Warshall 算法适用于在小规模的稠密图中一次性找到图中所有顶点的最短路径。
 
 ## 最小生成树算法
 
@@ -250,4 +474,7 @@ function breathFirstSearch(graph) {
 - 《算法》（第4版）
 - 《数据结构与算法之美》
 - 《学习JavaScript数据结构与算法》（第3版）
+- 《算法图解》
 - [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/graph)
+- ChatGPT 3.5
+- [LeetCode](https://leetcode.cn/tag/graph/problemset/)
