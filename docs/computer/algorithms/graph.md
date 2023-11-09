@@ -321,7 +321,7 @@ function getPath(predecessors, startVertex, targetVertex) {
 
 ## 最短路径算法
 
-**最短路径算法**（Shortest path algorithm）用于解决在带权图中的两顶点之间寻找最短路径问题的算法。最短路径问题可分为单对顶点最短路径问题、单源最短路径问题和多源最短路径问题等。
+**最短路径算法**（Shortest path algorithm）用于解决在带权图中的两顶点之间寻找最短路径问题。最短路径问题可分为单对顶点最短路径问题、单源最短路径问题和多源最短路径问题等。
 
 ### Dijkstra 算法
 
@@ -413,15 +413,13 @@ function dijkstraByPriorityQueue(graph, sourceVertex) {
 }
 ```
 
-优先队列的操作在[堆](https://zhangguangze.github.io/blog/computer/algorithms/heap.html)文章中讲过，这里就不在赘述。
-
 基于优先队列的 Dijkstra 算法使用邻接表来表示图。初始化时将源顶点及其距离加入到优先队列中。我们从优先队列中取出距离源顶点最近的顶点，然后遍历该顶点的邻居顶点，计算从源顶点到达邻居顶点的距离，如果计算出来的距离小于邻居顶点当前的距离，更新邻居顶点的距离和前驱顶点，并将邻居顶点和最新距离插入到优先队列中。重复以上过程直到找到目标顶点或者优先队列为空为止。
 
 通过优先队列可以将 Dijkstra 算法的时间复杂度优化到 O(E*logV)。V 为顶点的个数，E 为边的数量，优先队列操作的时间复杂度为 O(logV)。
 
 ### Floyd–Warshall 算法
 
-**Floyd–Warshall 算法**是一种通过动态规划来解决所有顶点对之间的最短路径算法，它的主要原理是通过中间顶点逐步改进顶点之间的最短路径，直到所有顶点对的最短路径计算完成为止。
+**Floyd–Warshall 算法**是一种通过动态规划思想来解决所有顶点对之间的最短路径问题的算法，它的主要原理是通过中间顶点逐步改进顶点之间的最短路径，直到所有顶点对的最短路径计算完成为止。
 
 ``` js
 function floydWarshall(graph) {
@@ -466,7 +464,93 @@ Floyd–Warshall 算法适用于在小规模的稠密图中一次性找到图中
 
 ## 最小生成树算法
 
-## 应用场景
+**最小生成树算法**（Minimum spanning tree algorithm，简称 MST）用于在连通加权无向图中寻找一棵能够连接图中所有顶点并且边的权重和最小的树。
+
+Prim 算法和 Kruskal 算法是解决最小生成树问题的两种经典算法。它们都基于贪心算法思想。
+
+### Prim 算法
+
+**Prim 算法**的核心原理是从任意一个起始顶点开始，逐步在与当前顶点相邻的、未选择的顶点中选择权重最小的边，将其加入到最小生成树中，直到生成树中包含 V-1 条边为止。
+
+![Prim_Animation](https://upload.wikimedia.org/wikipedia/commons/9/9b/PrimAlgDemo.gif)
+
+以下是 Prim 算法的代码实现：
+
+``` js
+function prim(n, graph) {
+  const minimumSpanningTree = [];
+  const priorityQueue = new PriorityQueue((a, b) => a[2] - b[2]);
+  const visited = new Set();
+  let selectedEdgeCount = 0;
+
+  const startVertex = 0;
+  visited.add(startVertex);
+
+  for (const [neighbor, weight] of graph[startVertex]) {
+    priorityQueue.insert([startVertex, neighbor, weight]);
+  }
+
+  while (!priorityQueue.isEmpty() && selectedEdgeCount < n - 1) {
+    const [u, v, w] = priorityQueue.remove();
+
+    if (visited.has(u) && visited.has(v)) continue;
+
+    minimumSpanningTree.push([u, v, w]);
+    const nextVertex = visited.has(u) ? v : u;
+    visited.add(nextVertex);
+
+    selectedEdgeCount++;
+
+    for (const [neighbor, weight] of graph[nextVertex]) {
+      if (!visited.has(neighbor)) {
+        priorityQueue.insert([nextVertex, neighbor, weight]);
+      }
+    }
+  }
+
+  return selectedEdgeCount === n - 1 ? minimumSpanningTree : [];
+}
+```
+
+Prim 算法需要使用优先队列来快速查找权重最小的边，并且需要一个集合来记录顶点是否被选择。
+
+初始化时任意选择一个顶点作为起始顶点，将其标记为已选择，并将该顶点相连的所有边加入到优先队列中。然后从优先队列中取出权重最小的边，确保边的一个顶点被选择，另一个顶点未被选择。将所选择的边添加到生成树中，并将边另一端的顶点标记为已选择。将新选择的顶点的相邻边加入优先队列，以便下一次选择。直到生成树中包含 V-1 条边为止。
+
+Prim 算法的时间复杂度为 O(ElogE)。
+
+### Kruskal 算法
+
+**Kruskal 算法**的核心原理是按权重递增顺序，逐步选择图中不同连通分量且权重最小的边，将边对应的两个顶点合并到一个集合中，并将边添加到生成树中，直到生成树包括 V-1 条边（并查集只存在一个集合）为止。
+
+![Kruskal_Animation](https://upload.wikimedia.org/wikipedia/commons/b/bb/KruskalDemo.gif)
+
+以下是 Kruskal 算法的代码实现：
+
+``` js
+function kruskal(n, edges) {
+  const minimumSpanningTree = [];
+  const ds = new DisjointSet(n);
+  let count = 0;
+
+  edges.sort((a, b) => a[2] - b[2]);
+
+  for (const [u, v, w] of edges) {
+    if (ds.isConnected(u, v)) continue;
+
+    ds.union(u, v);
+    minimumSpanningTree.push([u, v, w]);
+
+    count++;
+    if (count === n - 1) return minimumSpanningTree;
+  }
+
+  return [];
+}
+```
+
+Kruskal 算法初始化时将每个顶点划分到不同集合中，然后根据边的权重将图的所有边按照升序排序。如果当前边对应的两个顶点不在一个集合中，则将两个顶点对应的集合合并，并将当前边加入到生成树中。直到生成树包含 V-1 条边（并查集只存在一个集合）为止。
+
+Kruskal 算法的时间复杂度为 O(ElogE)。
 
 ## 参考
 - - [Wikipedia](https://en.wikipedia.org/wiki/Graph_traversal)
