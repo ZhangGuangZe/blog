@@ -552,6 +552,8 @@ Kruskal 算法初始化时将每个顶点划分到不同集合中，然后根据
 
 Kruskal 算法的时间复杂度为 O(ElogE)。
 
+关于图结构及图相关的算法，请点击[这里](https://github.com/ZhangGuangZe/data-structures-and-algorithms-in-javascript/tree/master/graph)查看。
+
 ## 参考
 - - [Wikipedia](https://en.wikipedia.org/wiki/Graph_traversal)
 - 《算法导论》
