@@ -4,11 +4,15 @@
 
 栈的操作主要包括**压入**（push）和**弹出**（pop）操作，这两个操作的时间复杂度为 O(1)。
 
+![Stack](https://upload.wikimedia.org/wikipedia/commons/e/e4/Lifo_stack.svg)
+
 栈可以基于数组和链表数据结构实现。
 
 ## 基于数组实现栈
 
 基于数组实现的栈结构包括一个保存栈顶元素的 `top` 指针、一个存储栈元素的 `items` 数组和指定栈容量的 `size` 属性。
+
+压入和弹出操作思路是从数组尾部插入和删除元素。
 
 ``` js
 class ArrayBasedStack {
@@ -25,9 +29,9 @@ class ArrayBasedStack {
 压入操作将元素压入栈顶同时将 `top` 指针指向新元素，如果当前栈已满，将不再压入数据。
 
 ``` js
-push(data) {
+push(val) {
   if (this.isFull()) return;
-  this.items[this.top++] = data;
+  this.items[this.top++] = val;
 }
 ```
 
@@ -44,12 +48,12 @@ pop() {
 
 2. 基于动态数组的栈
 
-由于我们使用的是数组数据结构，这就意味着我们需要事先指定栈的容量。如果指定的容量太小，当栈满后则无法将数据压入栈中；如果指定的容量太大，当栈内元素非常少甚至为空时将会浪费大量存储空间。我们可以使用动态数组来解决定容栈栈空间固定的问题，并且彻底删除已弹出的栈元素但还保存在动态数组中的元素。
+由于我们使用的是固定大小的数组，这就意味着我们需要事先指定栈的容量。如果指定的容量太小，当栈满后则无法将数据压入栈中；如果指定的容量太大，当栈内元素非常少甚至为空时将会浪费大量存储空间。我们可以使用动态数组来解决定容栈栈空间固定的问题，并且彻底删除已弹出的栈元素。
 
 在压入操作中，如果栈满，我们首先把原数组扩容两倍，并依次将元素搬移到扩容数组中，最后进行入栈操作。
 
 ``` js
-push(data) {
+push(val) {
   if (this.isFull()) {
     this.size *= 2;
     const temp = new Array(this.size);
@@ -58,7 +62,7 @@ push(data) {
     }
     this.items = temp;
   }
-  this.items[this.top++] = data;
+  this.items[this.top++] = val;
 }
 ```
 
@@ -99,31 +103,31 @@ isFull() {
 
 ## 基于链表实现栈
 
-基于链表实现栈的结构同样需要一个 `top` 属性记录当前栈元素数量，只不过使用单链表来存储栈元素。
+基于链表实现栈的结构需要一个 `size` 属性记录当前栈元素数量，只不过使用单链表来存储栈元素。
 
 ``` js
 class LinkedListBasedStack {
   constructor() {
-    this.top = 0;
+    this.size = 0;
     this.head = null;
   }
 }
 ```
 
-压入和弹出操作思路是从链表头部插入和删除元素并更新 `top` 指针即可，节点结构请参考单向链表节点结构。
+压入和弹出操作思路是从链表头部插入和删除元素并更新 `size` 属性即可，节点结构请参考单向链表节点结构。
 
 ``` js
-push(data) {
-  const node = new Node(data);
-  if (this.head) node.next = this.head;
-  this.head = node;
-  this.top++;
+push(val) {
+  const newNode = new Node(val);
+  if (this.head) newNode.next = this.head;
+  this.head = newNode;
+  this.size++;
 }
 pop() {
   if (this.isEmpty()) return;
   let val = this.peek();
   this.head = this.head.next;
-  this.top--;
+  this.size--;
   return val;
 }
 ```
@@ -134,14 +138,16 @@ pop() {
 
 ``` js
 peek() {
-  return this.head.data;
+  return this.head?.val;
 }
 isEmpty() {
-  return this.top === 0;
+  return this.size === 0;
 }
 ```
 
-基于链表实现栈的优点是可以灵活动态的将数据压入和弹出，但创建链表节点需要额外存储空间存放节点指针。
+基于链表实现栈的优点是可以灵活动态的将数据压入和弹出，但创建链表节点需要额外存储空间。
+
+关于栈的两种实现的详细代码和测试请点击[这里](https://github.com/ZhangGuangZe/data-structures-and-algorithms-in-javascript/tree/master/stack)查看。
 
 ## 应用场景
 
