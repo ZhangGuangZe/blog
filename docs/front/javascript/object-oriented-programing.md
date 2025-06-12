@@ -6,7 +6,7 @@
 
 ### 创建对象
 
-我们可以通过对象字面量、`new` 关键字组合构造函数和 `Object.create()` 创建对象。后两种方式将会在 [JavaScript 面向对象的演进](#javascript-面向对象的演进)中讲解。
+我们可以通过对象字面量、`new` 关键字组合构造函数和 `Object.create()` 方法创建对象。后两种方式将会在 [JavaScript 面向对象的演进](#javascript-面向对象的演进)中讲解。
 
 #### 对象字面量
 
@@ -142,7 +142,7 @@ delete globalThis.name //  => true
 ```
 
 ::: tip
-`Object.defineProperty` 用于定义属性特性，在元编程章节中将会深入讲解。
+`Object.defineProperty()` 方法用于定义属性特性，在元编程章节中将会深入讲解。
 :::
 
 ### 检查属性
@@ -162,7 +162,7 @@ const o = {
 
 - hasOwnProperty(prop)
 
-`hasOwnProperty()` 用于检查指定对象是否拥自有属性。
+`hasOwnProperty()` 方法用于检查指定对象是否拥自有属性。
 
 ``` js
 const o = {
@@ -365,7 +365,7 @@ Object.assign(o1, o2);
 
 - [_.cloneDeep()](https://github.com/lodash/lodash/blob/master/cloneDeep.js)
 
-针对以上两种方法存在的问题，可以通过 Lodash 库的 _.cloneDeep() 方法解决。
+针对以上两种方法存在的问题，可以通过 Lodash 库的 `_.cloneDeep()` 方法解决。
 
 - 自己实现
 
@@ -408,7 +408,7 @@ o === copy; // => false
 
 对象具有**唯一标识性**、**状态**和**行为**三个特性，每个对象都有一块唯一标识的内存地址（修改一个对象的状态和行为并不会影响到另一个对象），都通过状态来表示对象，并通过行为来改变对象的状态。
 
-在 Java 中，状态和行为通过属性和方法来描述，而在 JavaScript 中，状态和行为统一通过属性来描述。
+在 Java 中，状态和行为通过属性和方法来描述；而在 JavaScript 中，状态和行为统一通过属性来描述，属性既可以用作数据存储，也可以将行为与对象关联。那些值为函数的属性，可以作为对象的方法调用。而作为对象方法调用的函数，则可以使用 `this` 关键字动态的访问对象。
 
 面向对象编程有基于类（Class-based）和基于原型（Prototype-based）两种编程风格。
 
@@ -522,6 +522,8 @@ JavaScript 1.2 为实例对象提供了 `__proto__` 属性来动态的访问和�
 
 有了 `__proto__` 属性，我们就可以用其模拟 `new` 操作符的行为。不过在此之前，我们先来看看 `new` 操作符调用构造函数的原理。
 
+#### `new` 操作符调用构造函数的原理
+
 1. 创建一个新对象；
 2. 将新对象的原型指向构造函数的原型对象；
 3. 将构造函数内部的 `this` 与新对象绑定，并执行构造函数初始化新对象；
@@ -540,6 +542,15 @@ function createObject(Constructor, ...args) {
   // 4.返回对象
   return typeof res === 'object' ? res : obj;
 }
+
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.sayName = function() {
+  return `My name is ${this.name}`;
+}
+const person = createObject(Person, 'front-boy');
+console.log(person.sayName()); // My name is front-boy
 ```
 
 ### 模拟类的抽象模型
@@ -575,7 +586,7 @@ const john = new Employee('John', 'CTO');
 john.describe(); // => 'Person named John（CTO）'
 ```
 
-从以上代码可以看出，子类（Employee）需要通过函数对象的 `call` 方法借用父类（Person）的构造函数和方法实现多态效果，并且需要使用函数对象的 `prototype` 与 Person 的实例关联实现继承。
+从以上代码可以看出，子类（Employee）需要通过函数对象的 `call()` 方法借用父类（Person）的构造函数和方法实现多态效果，并且需要使用函数对象的 `prototype` 与 Person 的实例关联实现继承。
 
 我们可以用 `instanceof` 操作符来检测实例的类型。不过，与 Java 不同的是，JavaScript 的 `instanceof` 存在动态语义——遍历实例的原型链，搜索构造函数的原型对象。
 
@@ -629,9 +640,9 @@ john.constructor === Employee; // => true
 
 虽然 JavaScript 可以通过一些手段来模拟类的行为，从而基于类实现面向对象。但 JavaScript 的面向对象的本质是基于原型的。
 
-Douglas Crockford 将 `Object.create()` 引入到 ES5 中，让我们摆脱构造函数的束缚，通过原型委托来关联对象，从而实现基于原型的面向对象。
+Douglas Crockford 将 `Object.create()` 方法引入到 ES5 中，让我们摆脱构造函数的束缚，通过原型委托来关联对象，从而实现基于原型的面向对象。
 
-`Object.create()` 的原理大致如下：
+`Object.create()` 方法的原理大致如下：
 
 ``` js
 if (typeof Object.create !== 'function') {
@@ -643,7 +654,7 @@ if (typeof Object.create !== 'function') {
 }
 ```
 
-以上代码需要创建一个临时的构造函数，然后将构造函数的 `prototype` 与对象关联，最后返回与对象关联的新实例。
+以上代码需要创建一个临时的构造函数，然后将构造函数的 `prototype` 属性与对象关联，最后返回与对象关联的新实例。
 
 现在，我们抛开基于类的思维，看看 JavaScript 如何基于原型实现面向对象。
 
@@ -934,7 +945,7 @@ const john = new Employee('John', 'CTO');
 john.describe(); // => 'Person named John（CTO）'
 ```
 
-在子类的构造函数中，必须先调用父类的构造函数才能访问 `this` 并初始化子类。
+在子类的构造函数中，必须先调用父类的构造函数才能访问 `this` 关键字并初始化子类。
 
 ##### 抽象类
 
@@ -996,15 +1007,11 @@ s.baz();
 
 ## this 关键字
 
-由于当初设计时管理层要求这门语言长得像 Java，但没有类，想要支持面向对象又不能没有 `this`。并且深受 Scheme 函数一等公民的启发等因素。Brendan Eich 在函数中引入了 `this`，用来表示函数作为**方法被调用时的上下文对象**。
+由于当初设计时管理层要求这门语言长得像 Java，但没有类，想要支持面向对象又不能没有 `this` 关键字。并且深受 Scheme 函数一等公民的启发等因素。Brendan Eich 借鉴了 Java 中的 `this` 关键字，并引入到了 JavaScript 的函数中，用来表示函数作为**方法被调用时的上下文对象**。
 
-但是因为 `this` 是在运行时动态绑定的，它的指向取决于**函数的调用方式**，所以相同的 `this` 在不同场景下的语义可能不同。这也导致 `this` 指向出现了一些混乱和 bug。
+但是因为 `this` 是在运行时动态绑定的，它的指向取决于**函数的调用方式**，所以相同的 `this` 值在不同场景下的语义可能不同。这也导致 `this` 指向出现了一些混乱，可能与预期不符。
 
-在 JavaScript 中，`this` 可以出现在对象方法、独立函数和事件处理器中并且具有相同的语义；而在大多数语言中，`this` 只能出现在类中。这使其他语言的开发者学习 JavaScript 时产生混乱。
-
-直接调用函数时，`this` 则指向全局对象，这是 JavaScript 设计存在的公认 bug 之一。不过，该 bug 可以通过严格模式来解决，这样 `this` 将会指向 `undefined`。
-
-不过，`this` 可以让代码变得更加简洁并且易于复用。原型对象的方法在运行时可以通过 `this` 动态的确认上下文对象。
+在 JavaScript 中，`this` 关键字可以出现在对象方法、独立函数和事件处理器中并且具有相同的语义；而在大多数语言中，`this` 关键字只能出现在类中。这使其他语言的开发者学习 JavaScript 时产生混乱。不过，`this` 动态性可以让代码变得更加简洁并且易于复用。原型对象的方法在运行时可以通过 `this` 动态的确认上下文对象。
 
 关于 `this` 的更多细节，我们将会在浏览器的执行过程中看到。
 
@@ -1024,4 +1031,4 @@ s.baz();
 - [重学前端](https://time.geekbang.org/column/article/78884)
 - [How JavaScript Works](https://crockford.com/javascript)
 - [JavaScript专题之深浅拷贝](https://github.com/mqyqingfeng/Blog/issues/32)
-- [面试官：深拷贝浅拷贝的区别？如何实现一个深拷贝？](https://github.com/febobo/web-interview/issues/56)
+- [面试官：深拷贝浅拷贝的区别？如何实现一个深拷贝？](https://vue3js.cn/interview/JavaScript/copy.html)
