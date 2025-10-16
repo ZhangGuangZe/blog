@@ -407,11 +407,11 @@ function countingSort(arr) {
 
 **桶排序**（Bucket sort）是一种分布式排序算法。其思想是将元素分配到有限数量的桶中，然后对每个桶内的元素进行排序，最后将所有桶中的元素合并为一个有序序列。
 
-[Bucket_sort_1](https://upload.wikimedia.org/wikipedia/commons/6/61/Bucket_sort_1.svg)
+![Bucket_sort_1](https://upload.wikimedia.org/wikipedia/commons/6/61/Bucket_sort_1.svg)
 
 首先，将元素分配到桶中。
 
-[Bucket_sort_2](https://upload.wikimedia.org/wikipedia/commons/e/e3/Bucket_sort_2.svg)
+![Bucket_sort_2](https://upload.wikimedia.org/wikipedia/commons/e/e3/Bucket_sort_2.svg)
 
 然后，对每个桶内的元素进行排序。
 
